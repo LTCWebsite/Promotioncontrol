@@ -39,9 +39,10 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeReport from "../Report/HomeReport";
 import HomeRole from "../UserSetting/HomeRole";
 import Dashboard1 from "../Dashboard/Dashboard1";
-import Promotions from "../Promotions/Promotions";
-import Grouppromotion from "../Promotions/Grouppromotion";
+import Promotions from "../Promotions/Firstactive";
+import Firstactive from "../Promotions/Firstactive";
 import Reportpromotion from "../Report/Reportpromotion";
+import Speciallist from "../Promotions/Speciallist";
 
 const drawerWidth = 250;
 
@@ -295,7 +296,7 @@ export default function PersistentDrawerLeft() {
                   </ListItemIcon>
                   <ListItemText
                     className="home_drawer_menuText"
-                    primary="ການຄວບຄຸມໂປຣໂມເຊີ້ນ"
+                    primary="ພາບລວມຂໍ້ມູນ"
                   />
                 </ListItemButton>
               </List>
@@ -303,11 +304,11 @@ export default function PersistentDrawerLeft() {
               <List>
                 <ListItemButton
                   className={
-                    pathname === "/home/promotion"
+                    pathname === "/home/speciallist"
                       ? "home_drawer_menu menu-active"
                       : "home_drawer_menu"
                   }
-                  onClick={() => history.push("/home/promotion")}
+                  onClick={() => history.push("/home/speciallist")}
                 >
                   <ListItemIcon style={{ minWidth: "30px" }}>
                     <span style={{ paddingBottom: ".2rem" }}>
@@ -316,7 +317,7 @@ export default function PersistentDrawerLeft() {
                   </ListItemIcon>
                   <ListItemText
                     className="home_drawer_menuText"
-                    primary="ໂປຣໂມເຊີ້ນ"
+                    primary="Special List"
                   />
                 </ListItemButton>
               </List>
@@ -324,13 +325,11 @@ export default function PersistentDrawerLeft() {
               <List>
                 <ListItemButton
                   className={
-                    pathname === "/home/promotions/grouppromotion"
+                    pathname === "/home/promotions/firstactive"
                       ? "home_drawer_menu menu-active"
                       : "home_drawer_menu"
                   }
-                  onClick={() =>
-                    history.push("/home/promotions/grouppromotion")
-                  }
+                  onClick={() => history.push("/home/promotions/firstactive")}
                 >
                   <ListItemIcon style={{ minWidth: "30px" }}>
                     <span style={{ paddingBottom: ".2rem" }}>
@@ -339,7 +338,7 @@ export default function PersistentDrawerLeft() {
                   </ListItemIcon>
                   <ListItemText
                     className="home_drawer_menuText"
-                    primary="ປະເພດໂປຣໂມເຊີ້ນ"
+                    primary="First Active"
                   />
                 </ListItemButton>
               </List>
@@ -365,7 +364,7 @@ export default function PersistentDrawerLeft() {
                 </ListItemButton>
               </List> */}
 
-              <List>
+              {/* <List>
                 <ListItemButton
                   className={
                     pathname === "/home/report"
@@ -384,7 +383,7 @@ export default function PersistentDrawerLeft() {
                     primary="ການລາຍງານ"
                   />
                 </ListItemButton>
-              </List>
+              </List> */}
 
               <List>
                 <a className="openbook" href={book} target="_blank">
@@ -496,10 +495,11 @@ export default function PersistentDrawerLeft() {
         <Typography paragraph>
           <Switch>
             <Route path={"/home/"} component={Dashboard1} exact />
-            <Route path={"/home/promotion"} component={Promotions} exact />
+            <Route path={"/home/speciallist"} component={Speciallist} exact />
             <Route
-              path={"/home/promotions/grouppromotion"}
-              component={Grouppromotion}
+              path={"/home/promotions/firstactive"}
+              component={Firstactive}
+              exact
             />
             {/* <Route path={"/home/category"} component={CategoryPage} exact />
             <Route path={"/home/category/group"} component={GroupPage} /> */}

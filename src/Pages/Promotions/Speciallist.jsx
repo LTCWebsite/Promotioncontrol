@@ -1,16 +1,16 @@
 import { Grid } from "@mui/material";
 import React from "react";
 
-function Grouppromotion() {
+function Speciallist() {
   return (
     <>
       <Grid container>
         <Grid item xs={12}>
-          <u>Group promotion...</u>
+          <u>Speciallist ...</u>
         </Grid>
       </Grid>
     </>
   );
 }
 
-export default Grouppromotion;
+export default Speciallist;
