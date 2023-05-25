@@ -4,9 +4,9 @@ import React from "react";
 function Speciallist() {
   return (
     <>
-      <Grid container>
-        <Grid item xs={12}>
-          <u>Speciallist ...</u>
+      <Grid container className="head-model">
+        <Grid className="main" item xs={12}>
+          <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
         </Grid>
       </Grid>
     </>
