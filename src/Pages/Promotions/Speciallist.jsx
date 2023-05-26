@@ -56,12 +56,12 @@ function Speciallist() {
       <Grid container className="head-model">
         <Grid className="main" item xs={12}>
           <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
-          <Grid xs={12}>
+          <Grid xs={12} spacing={3}>
             <div
               style={{ display: "flex", padding: ".5rem", marginTop: "20px" }}
               className="wapper-manage"
             >
-              <Grid xs={3 / 2.2}>
+              <Grid xs={2}>
                 <div>
                   <p className="manage-ft-text">ປະເພດ</p>
                   <OtherSelect
@@ -72,7 +72,7 @@ function Speciallist() {
                   />
                 </div>
               </Grid>
-              <Grid xs={3 / 2.1}>
+              <Grid xs={2}>
                 <div>
                   <p className="manage-ft-text">ປະເພດເບີ</p>
                   <OtherSelect
@@ -122,7 +122,7 @@ function Speciallist() {
                   </div>
                 </div>
               </Grid>
-              <div style={{ display: "flex", float: "right" }}>
+              <Grid style={{ display: "flex" }}>
                 <div style={{ marginLeft: "1.5rem", marginTop: "1.5rem" }}>
                   <MDBBtn className="me-1" color="success">
                     Import Excel
@@ -131,7 +131,7 @@ function Speciallist() {
                     ເພິ່ມໃໝ່
                   </MDBBtn>
                 </div>
-              </div>
+              </Grid>
             </div>
           </Grid>
         </Grid>
