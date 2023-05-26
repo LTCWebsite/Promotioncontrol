@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import '../src/Components/App.css'
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import "../src/Components/App.css";
+import "react-toastify/dist/ReactToastify.css";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App/>
+    <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
