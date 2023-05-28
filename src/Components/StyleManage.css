@@ -228,3 +228,18 @@
   font-family: "Poppins", "Noto Sans Lao", sans-serif !important;
 
 }
+
+.input-search {
+  margin-top: -15px !important;
+  font-size: 15px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.list-phone-special {
+  background-color: white !important;
+  border-radius: 7px !important;
+  margin-top: 30px !important;
+}
