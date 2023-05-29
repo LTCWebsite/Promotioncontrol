@@ -82,103 +82,6 @@ function Speciallist() {
     label: x.viptype,
   }));
 
-  function Row(props) {
-    const { row } = props;
-    const [openTable, setOpenTable] = useState(false);
-
-    const findMsisdn = (e) => {
-      setOpenTable(!openTable);
-    };
-
-    return (
-      <>
-        <TableRow
-          sx={{
-            [`& .${tableCellClasses.root}`]: {
-              borderBottom: "none",
-            },
-          }}
-        >
-          <TableCell align="center">
-            <Button
-              variant=""
-              aria-label="expand row"
-              size="small"
-              onClick={() => findMsisdn(row.msisdn)}
-            >
-              {openTable ? (
-                <span style={{ display: "flex" }}>
-                  <span className="icon-show">
-                    <IconArrowUp />
-                  </span>
-                  <span className="btn-show">ປິດ</span>
-                </span>
-              ) : (
-                <span style={{ display: "flex" }}>
-                  <span className="icon-show">
-                    <IconArrowDown />
-                  </span>
-                  <span className="btn-show">ແພັກເກັດ</span>
-                </span>
-              )}
-            </Button>
-          </TableCell>
-          <TableCell align="left">
-            <div>
-              <span>{row.msisdn}</span>
-              <br />
-              <span className="group-type">
-                {row.phoneType === null ? "-" : row.phoneType}
-              </span>
-            </div>
-          </TableCell>
-          <TableCell align="left">{row.vipType}</TableCell>
-
-          <TableCell align="left">{row.cateName}</TableCell>
-          <TableCell>
-            <span>{row.groupName}</span>
-          </TableCell>
-          <TableCell>{moment(row.registerDate).format("DD-MM-YYYY")}</TableCell>
-          <TableCell>
-            {row.stopDate === "" ? (
-              <span> - </span>
-            ) : (
-              moment(row.stopDate).format("DD-MM-YYYY")
-            )}
-          </TableCell>
-          <TableCell align="center">
-            <span className={row.status === "True" ? "status" : "status-dis"}>
-              {row.status === "True" ? "Active" : "Disactive"}
-            </span>
-          </TableCell>
-          <TableCell align="center">
-            <Button
-              // sx={{textAlign}}
-              variant="contained"
-              size="small"
-              className="btn-view"
-              onClick={() => view_pofile(row.msisdn)}
-            >
-              <Icon_View />
-            </Button>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell
-            style={{ background: "#CFCFCF", paddingBottom: 0, paddingTop: 0 }}
-            colSpan={9}
-          >
-            <Collapse in={openTable} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <ManageTT msisdn={row.msisdn} />
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </>
-    );
-  }
-
   const view_pofile = (e) => {
     let data = dataTable.filter((x) => x.msisdn === e);
     let sendPage = {
@@ -241,6 +144,55 @@ function Speciallist() {
     LoadDataNew(savePage, perPage);
   }, [selectCate, seletgroup, getVIP, getNetwork]);
 
+  const dataTest = [
+    {
+      resultCode: 200,
+      resultDes: "Succesful",
+      dataTable: [
+        {
+          package: "535",
+          msisdn: "2054222591",
+          dateCreate: "27-5-2023",
+          dateStop: "26-6-2023",
+          province: "VTE",
+          status: "Active",
+        },
+        {
+          package: "1010",
+          msisdn: "2054222592",
+          dateCreate: "27-5-2023",
+          dateStop: "26-6-2023",
+          province: "SVK",
+          status: "Deactive",
+        },
+        {
+          package: "507",
+          msisdn: "2054222591",
+          dateCreate: "27-5-2023",
+          dateStop: "26-6-2023",
+          province: "VTE",
+          status: "Active",
+        },
+        {
+          package: "507",
+          msisdn: "2054222591",
+          dateCreate: "27-5-2023",
+          dateStop: "26-6-2023",
+          province: "CPS",
+          status: "Deactive",
+        },
+        {
+          package: "106",
+          msisdn: "2054222591",
+          dateCreate: "27-5-2023",
+          dateStop: "26-6-2023",
+          province: "VTE",
+          status: "Active",
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <Grid container className="head-model">
@@ -253,7 +205,7 @@ function Speciallist() {
             >
               <Grid xs={2} style={{ paddingRight: "5px" }}>
                 <div>
-                  <p className="manage-ft-text ">ປະເພດ</p>
+                  <p className="manage-ft-text ">ປະເພດແພັກແກັດ</p>
                   <OtherSelect
                     className="input-search"
                     options={option_VIP}
@@ -349,15 +301,14 @@ function Speciallist() {
               <div>
                 <table className="list-phone">
                   <tr>
-                    <th width={120}>#</th>
-                    <th>ໝາຍເລກ</th>
-                    <th>ປະເພດ</th>
-                    <th>ໝວດໝູ່</th>
-                    <th>ປະເພດກຸ່ມ</th>
-                    <th>ວັນທີຮັບນະໂຍບາຍ</th>
-                    <th width={120}>ວັນທີສິ້ນສຸດນະໂຍບາຍ</th>
+                    <th width={120}>ID </th>
+                    <th>ປະເພດແພັກແກັດ</th>
+                    <th width={120}>ເບີ</th>
+                    <th>ວັນທີເລີ່ມ</th>
+                    <th>ວັນທີສິ້ນສຸດ</th>
+                    <th>ເເຂວງ</th>
                     <th>ສະຖານະ</th>
-                    <th>ລາຍລະອຽດ</th>
+                    <th>ຈັດການ</th>
                   </tr>
                 </table>
               </div>
