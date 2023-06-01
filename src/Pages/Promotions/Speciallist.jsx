@@ -144,55 +144,6 @@ function Speciallist() {
     LoadDataNew(savePage, perPage);
   }, [selectCate, seletgroup, getVIP, getNetwork]);
 
-  const dataTest = [
-    {
-      resultCode: 200,
-      resultDes: "Succesful",
-      dataTable: [
-        {
-          package: "535",
-          msisdn: "2054222591",
-          dateCreate: "27-5-2023",
-          dateStop: "26-6-2023",
-          province: "VTE",
-          status: "Active",
-        },
-        {
-          package: "1010",
-          msisdn: "2054222592",
-          dateCreate: "27-5-2023",
-          dateStop: "26-6-2023",
-          province: "SVK",
-          status: "Deactive",
-        },
-        {
-          package: "507",
-          msisdn: "2054222591",
-          dateCreate: "27-5-2023",
-          dateStop: "26-6-2023",
-          province: "VTE",
-          status: "Active",
-        },
-        {
-          package: "507",
-          msisdn: "2054222591",
-          dateCreate: "27-5-2023",
-          dateStop: "26-6-2023",
-          province: "CPS",
-          status: "Deactive",
-        },
-        {
-          package: "106",
-          msisdn: "2054222591",
-          dateCreate: "27-5-2023",
-          dateStop: "26-6-2023",
-          province: "VTE",
-          status: "Active",
-        },
-      ],
-    },
-  ];
-
   return (
     <>
       <Grid container className="head-model">
@@ -268,14 +219,18 @@ function Speciallist() {
                 </div>
               </Grid>
               <Grid style={{ display: "flex" }} xs={3}>
-                <div className="bt-group-import ">
+                <Grid
+                  item
+                  xs={12}
+                  className="bt-group-import floatRight pdr-20"
+                >
                   <MDBBtn className="me-1 mt-20" color="success">
                     Import Excel
                   </MDBBtn>
                   <MDBBtn className="me-1 mt-20" color="danger">
                     ເພິ່ມໃໝ່
                   </MDBBtn>
-                </div>
+                </Grid>
               </Grid>
             </div>
           </Grid>
