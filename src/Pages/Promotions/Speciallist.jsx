@@ -21,6 +21,7 @@ import Stack from "@mui/material/Stack";
 import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
 import { ceil } from "lodash";
+import AxiosReq from "../../Components/Axios/AxiosReq";
 
 function Speciallist() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -42,6 +43,8 @@ function Speciallist() {
   const [dataTable, setdataTable] = useState([]);
   const [loading, setloading] = useState(true);
   const [emptyPage, setEmptyPage] = useState(false);
+  const [packages, setPK] = useState([]);
+  const [listSpecial, setSpeciallist] = useState([]);
 
   function getValueVIP(e) {
     setGetVIP(e.value);
@@ -77,6 +80,11 @@ function Speciallist() {
     label: x.viptype,
   }));
 
+  // const option_cate = dataCate.map((x) => ({
+  //   value: x.id,
+  //   label: x.catename,
+  // }));
+
   const option_NetworkTpre = networkType.map((x) => ({
     value: x.viptype,
     label: x.viptype,
@@ -98,6 +106,18 @@ function Speciallist() {
     // console.log(savePage);
   };
 
+  const Datapakage = () => {
+    // AxiosReq.get("ListPrmtId")
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       setPK(res);
+    //     }
+    //   })
+    //   .catch((er) => {
+    //     console.log(er);
+    //   });
+  };
+
   const LoadDataNew = (page, limit) => {
     setdataTable([]);
     setloading(true);
@@ -108,18 +128,16 @@ function Speciallist() {
     let newValue3 = getVIP === "ທັງໝົດ" ? "all" : getVIP;
     let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
 
-    Axios.post(
-      `/api/Group/QueryMsisdnInGroup?username=${userName}&page=${page}&limit=${limit}`,
-      {
-        cateId: newValue,
-        groupId: newValue2,
-        vipType: newValue3,
-        phoneType: newValue4,
-      },
+    AxiosReq.post(
+      `api/Special_Package/QuerySpecialPkList?page=1&limit=10`,
+
       { headers: header }
     ).then((res) => {
+      console.log("dataList", res?.data);
       if (res.status === 200) {
         setsavePage(page);
+        setSpeciallist(res);
+
         if (res.data.resultCode === 201) {
           // console.log("br mi data");
           setEmptyPage(true);
@@ -140,10 +158,104 @@ function Speciallist() {
     });
   };
 
+  console.log("Data:", listSpecial);
+
+  const Row = (row) => {
+    const [openTable, setOpenTable] = useState(false);
+
+    const findMsisdn = (e) => {
+      setOpenTable(!openTable);
+    };
+
+    console.log("List: ", row);
+    return (
+      <>
+        <TableRow
+          sx={{
+            [`& .${tableCellClasses.root}`]: {
+              borderBottom: "none",
+            },
+          }}
+        >
+          {}
+          {/* <TableCell align="center">
+            <Button
+              variant=""
+              aria-label="expand row"
+              size="small"
+              // onClick={() => findMsisdn(row.msisdn)}
+            >
+              {openTable ? (
+                <span style={{ display: "flex" }}>
+                  <span className="icon-show">
+                    <IconArrowUp />
+                  </span>
+                  <span className="btn-show">ປິດ</span>
+                </span>
+              ) : (
+                <span style={{ display: "flex" }}>
+                  <span className="icon-show">
+                    <IconArrowDown />
+                  </span>
+                  <span className="btn-show">ແພັກເກັດ</span>
+                </span>
+              )}
+            </Button>
+          </TableCell> */}
+          <TableCell align="left"></TableCell>
+          <TableCell align="left">{}</TableCell>
+
+          <TableCell align="left">{}</TableCell>
+          <TableCell>
+            <span>{}</span>
+          </TableCell>
+          <TableCell>
+            {moment().format(
+              // row.registerDate
+              "DD-MM-YYYY"
+            )}
+          </TableCell>
+          <TableCell></TableCell>
+          <TableCell align="center">
+            {/* <span className={row.status === "True" ? "status" : "status-dis"}>
+              {row.status === "True" ? "Active" : "Disactive"}
+            </span> */}
+          </TableCell>
+          <TableCell align="center">
+            <Button
+              // sx={{textAlign}}
+              variant="contained"
+              size="small"
+              className="btn-view"
+              // onClick={() => view_pofile(row.msisdn)}
+            >
+              <Icon_View />
+            </Button>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell
+            style={{ background: "#CFCFCF", paddingBottom: 0, paddingTop: 0 }}
+            colSpan={9}
+          >
+            <Collapse in={openTable} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>
+                {/* <ManageTT msisdn={row.msisdn} /> */}
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </>
+    );
+  };
+
   useEffect(() => {
     LoadDataNew(savePage, perPage);
+    Datapakage();
+    // TableListSpecial();
   }, [selectCate, seletgroup, getVIP, getNetwork]);
 
+  console.log("packages:", listSpecial);
   return (
     <>
       <Grid container className="head-model">
@@ -159,7 +271,7 @@ function Speciallist() {
                   <p className="manage-ft-text ">ປະເພດແພັກແກັດ</p>
                   <OtherSelect
                     className="input-search"
-                    options={option_VIP}
+                    options={""}
                     defaultValue={{ value: "all", label: "ທັງໝົດ" }}
                     styles={customStyles}
                     onChange={(e) => getValueVIP(e)}
@@ -173,7 +285,7 @@ function Speciallist() {
                     className="input-search"
                     options={option_NetworkTpre}
                     defaultValue={{ value: "all", label: "ທັງໝົດ" }}
-                    styles={customStyles}
+                    // styles={customStyles}
                     onChange={(e) => getValueNetwork(e)}
                   />
                 </div>
@@ -265,6 +377,8 @@ function Speciallist() {
                     <th>ສະຖານະ</th>
                     <th>ຈັດການ</th>
                   </tr>
+
+                  <tbody>{<Row row={listSpecial} />}</tbody>
                 </table>
               </div>
             </Grid>
