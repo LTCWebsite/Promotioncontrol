@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Table, TableCell } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableHead } from "@mui/material";
 import {
   IconArrowDown,
   IconArrowUp,
@@ -160,91 +160,48 @@ function Speciallist() {
 
   console.log("Data:", listSpecial);
 
-  const Row = (row) => {
+  const Row = ({ data }) => {
     const [openTable, setOpenTable] = useState(false);
 
     const findMsisdn = (e) => {
       setOpenTable(!openTable);
     };
 
-    console.log("List: ", row);
+    console.log("List: ", data);
     return (
       <>
-        <TableRow
-          sx={{
-            [`& .${tableCellClasses.root}`]: {
-              borderBottom: "none",
-            },
-          }}
-        >
-          {}
-          {/* <TableCell align="center">
-            <Button
-              variant=""
-              aria-label="expand row"
-              size="small"
-              // onClick={() => findMsisdn(row.msisdn)}
-            >
-              {openTable ? (
-                <span style={{ display: "flex" }}>
-                  <span className="icon-show">
-                    <IconArrowUp />
-                  </span>
-                  <span className="btn-show">ປິດ</span>
-                </span>
-              ) : (
-                <span style={{ display: "flex" }}>
-                  <span className="icon-show">
-                    <IconArrowDown />
-                  </span>
-                  <span className="btn-show">ແພັກເກັດ</span>
-                </span>
-              )}
-            </Button>
-          </TableCell> */}
-          <TableCell align="left"></TableCell>
-          <TableCell align="left">{}</TableCell>
-
-          <TableCell align="left">{}</TableCell>
-          <TableCell>
-            <span>{}</span>
-          </TableCell>
-          <TableCell>
-            {moment().format(
-              // row.registerDate
-              "DD-MM-YYYY"
-            )}
-          </TableCell>
-          <TableCell></TableCell>
-          <TableCell align="center">
-            {/* <span className={row.status === "True" ? "status" : "status-dis"}>
-              {row.status === "True" ? "Active" : "Disactive"}
-            </span> */}
-          </TableCell>
-          <TableCell align="center">
-            <Button
-              // sx={{textAlign}}
-              variant="contained"
-              size="small"
-              className="btn-view"
-              // onClick={() => view_pofile(row.msisdn)}
-            >
-              <Icon_View />
-            </Button>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell
-            style={{ background: "#CFCFCF", paddingBottom: 0, paddingTop: 0 }}
-            colSpan={9}
-          >
-            <Collapse in={openTable} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                {/* <ManageTT msisdn={row.msisdn} /> */}
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
+        <Table style={{ marginTop: 15 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell width={10}>No.</TableCell>
+              <TableCell>ປະເພດແພັກແກັດ</TableCell>
+              <TableCell>ເບີໂທ</TableCell>
+              <TableCell>ວັນທີເລີ່ມ</TableCell>
+              <TableCell>ວັນທີສິ້ນສຸດ</TableCell>
+              <TableCell align="center">ເເຂວງ</TableCell>
+              <TableCell align="center">ສະຖານະ</TableCell>
+              <TableCell align="right">ຈັດການ</TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+        {data?.data?.data?.map((res, idx) => {
+          return (
+            <>
+              <TableBody>
+                <TableCell align="left">{idx + 1}</TableCell>
+                <TableCell align="left">{res?.prmtId}</TableCell>
+                <TableCell align="left">{res?.msisdn}</TableCell>
+                <TableCell align="left">{res?.startTime}</TableCell>
+                <TableCell align="left">{res?.stopTime}</TableCell>
+                <TableCell align="left">{res?.province}</TableCell>
+                <TableCell align="left">
+                  {res?.productType === "null" ? <> Null</> : null}
+                </TableCell>
+                <TableCell align="left">{res?.prmtId}</TableCell>
+              </TableBody>
+            </>
+          );
+        })}
       </>
     );
   };
@@ -366,9 +323,10 @@ function Speciallist() {
             </Grid>
             <Grid item xs={12}>
               <div>
-                <table className="list-phone">
+                <Row data={listSpecial} />
+                {/* <table className="list-phone">
                   <tr>
-                    <th width={120}>ID </th>
+                    <th width={120}>No. </th>
                     <th>ປະເພດແພັກແກັດ</th>
                     <th width={120}>ເບີ</th>
                     <th>ວັນທີເລີ່ມ</th>
@@ -378,8 +336,8 @@ function Speciallist() {
                     <th>ຈັດການ</th>
                   </tr>
 
-                  <tbody>{<Row row={listSpecial} />}</tbody>
-                </table>
+                  <tbody>{}</tbody>
+                </table> */}
               </div>
             </Grid>
           </Grid>
