@@ -22,6 +22,7 @@ import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
 import { ceil } from "lodash";
 import AxiosReq from "../../Components/Axios/AxiosReq";
+import { EditNote, Visibility } from "@mui/icons-material";
 
 function Speciallist() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -173,35 +174,87 @@ function Speciallist() {
         <Table style={{ marginTop: 15 }}>
           <TableHead>
             <TableRow>
-              <TableCell width={10}>No.</TableCell>
-              <TableCell>ປະເພດແພັກແກັດ</TableCell>
-              <TableCell>ເບີໂທ</TableCell>
-              <TableCell>ວັນທີເລີ່ມ</TableCell>
-              <TableCell>ວັນທີສິ້ນສຸດ</TableCell>
-              <TableCell align="center">ເເຂວງ</TableCell>
+              <TableCell width={"10%"} align="center">
+                ລ/ດ.
+              </TableCell>
+              <TableCell width={"10%"}>ປະເພດແພັກແກັດ</TableCell>
+              <TableCell width={"10%"} align="center">
+                ເບີໂທ
+              </TableCell>
+              <TableCell width={"15%"} align="center">
+                ວັນທີເລີ່ມ
+              </TableCell>
+              <TableCell width={"15%"} align="center">
+                ວັນທີສິ້ນສຸດ
+              </TableCell>
+              <TableCell width={"10%"}>ເເຂວງ</TableCell>
               <TableCell align="center">ສະຖານະ</TableCell>
-              <TableCell align="right">ຈັດການ</TableCell>
+              <TableCell align="center">ຈັດການ</TableCell>
             </TableRow>
           </TableHead>
+          {data?.data?.data?.map((res, idx) => {
+            return (
+              <>
+                <TableBody>
+                  <TableCell align="center" width={"10%"}>
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell align="left" width={"10%"}>
+                    {res?.prmtId}
+                  </TableCell>
+                  <TableCell align="center" width={"15%"}>
+                    {res?.msisdn}
+                  </TableCell>
+                  <TableCell align="center" width={"15%"}>
+                    {res?.startTime}
+                  </TableCell>
+                  <TableCell align="center" width={"15%"}>
+                    {res?.stopTime}
+                  </TableCell>
+                  <TableCell align="left" width={"10%"}>
+                    {res?.province}
+                  </TableCell>
+                  <TableCell align="center">
+                    {res?.productType === null ? (
+                      <MDBBtn rounded color="danger">
+                        {" "}
+                        ຍັງບໍ່ມີ
+                      </MDBBtn>
+                    ) : null}
+                  </TableCell>
+                  <TableCell width={"15%"} align="center">
+                    <Grid container spacing={2}>
+                      <Grid item xs={5} className="btn-view">
+                        <MDBBtn
+                          color="success"
+                          // sx={{textAlign}}
+                          variant="contained"
+                          size="sm"
+                          // className="btn-view"
+                          // onClick={() => view_datapackage()}
+                        >
+                          <Visibility className="icon-view" />
+                        </MDBBtn>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <MDBBtn
+                          color="success"
+                          // sx={{textAlign}}
+                          variant="contained"
+                          size="sm"
+                          // className="btn-view"
+                          // onClick={() => view_pofile()}
+                        >
+                          <EditNote />
+                        </MDBBtn>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                </TableBody>
+              </>
+            );
+          })}
         </Table>
-        {data?.data?.data?.map((res, idx) => {
-          return (
-            <>
-              <TableBody>
-                <TableCell align="left">{idx + 1}</TableCell>
-                <TableCell align="left">{res?.prmtId}</TableCell>
-                <TableCell align="left">{res?.msisdn}</TableCell>
-                <TableCell align="left">{res?.startTime}</TableCell>
-                <TableCell align="left">{res?.stopTime}</TableCell>
-                <TableCell align="left">{res?.province}</TableCell>
-                <TableCell align="left">
-                  {res?.productType === "null" ? <> Null</> : null}
-                </TableCell>
-                <TableCell align="left">{res?.prmtId}</TableCell>
-              </TableBody>
-            </>
-          );
-        })}
       </>
     );
   };

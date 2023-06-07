@@ -791,3 +791,11 @@ td {
 .pdr-20 {
   padding-right: 20px !important;
 }
+
+.icon-view {
+  color: white !important;
+}
+
+.btn-view {
+  margin-right: 5px !important;
+}
