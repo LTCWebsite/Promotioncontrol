@@ -46,6 +46,7 @@ function Speciallist() {
   const [emptyPage, setEmptyPage] = useState(false);
   const [packages, setPK] = useState([]);
   const [listSpecial, setSpeciallist] = useState([]);
+  const dateNow = new Date();
 
   function getValueVIP(e) {
     setGetVIP(e.value);
@@ -130,7 +131,7 @@ function Speciallist() {
     let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
 
     AxiosReq.post(
-      `api/Special_Package/QuerySpecialPkList?page=1&limit=10`,
+      `api/Special_Package/QuerySpecialPkList?page=1&limit=1000`,
 
       { headers: header }
     ).then((res) => {
@@ -172,27 +173,42 @@ function Speciallist() {
     return (
       <>
         <Table style={{ marginTop: 15 }}>
-          <TableHead>
+          <TableHead className="head-table-Speciallis">
             <TableRow>
               <TableCell width={"10%"} align="center">
-                ລ/ດ.
+                <u>ລ/ດ.</u>
               </TableCell>
               <TableCell width={"10%"}>ປະເພດແພັກແກັດ</TableCell>
               <TableCell width={"10%"} align="center">
-                ເບີໂທ
+                <u>ເບີໂທ</u>
               </TableCell>
               <TableCell width={"15%"} align="center">
-                ວັນທີເລີ່ມ
+                <u>ວັນທີເລີ່ມ</u>
               </TableCell>
               <TableCell width={"15%"} align="center">
-                ວັນທີສິ້ນສຸດ
+                <u>ວັນທີສິ້ນສຸດ</u>
               </TableCell>
-              <TableCell width={"10%"}>ເເຂວງ</TableCell>
-              <TableCell align="center">ສະຖານະ</TableCell>
-              <TableCell align="center">ຈັດການ</TableCell>
+              <TableCell width={"10%"}>
+                {" "}
+                <u>ເເຂວງ</u>{" "}
+              </TableCell>
+              <TableCell align="center">
+                {" "}
+                <u>ສະຖານະ</u>{" "}
+              </TableCell>
+              <TableCell align="center">
+                {" "}
+                <u>ຈັດການ</u>{" "}
+              </TableCell>
             </TableRow>
           </TableHead>
           {data?.data?.data?.map((res, idx) => {
+            let status;
+            let numDay = moment
+              .duration(moment(res?.stopTime).diff(moment(dateNow)))
+              .asDays()
+              .toFixed(0);
+
             return (
               <>
                 <TableBody>
@@ -206,23 +222,26 @@ function Speciallist() {
                     {res?.msisdn}
                   </TableCell>
                   <TableCell align="center" width={"15%"}>
-                    {res?.startTime}
+                    {moment(res?.startTime).format("DD-MM-YYYY HH:mm:ss")}
                   </TableCell>
                   <TableCell align="center" width={"15%"}>
-                    {res?.stopTime}
+                    {moment(res?.stopTime).format("DD-MM-YYYY HH:mm:ss")}
                   </TableCell>
                   <TableCell align="left" width={"10%"}>
                     {res?.province}
                   </TableCell>
                   <TableCell align="center">
-                    {res?.productType === null ? (
-                      <MDBBtn rounded color="danger">
-                        {" "}
-                        ຍັງບໍ່ມີ
+                    {numDay > 0 ? (
+                      <MDBBtn rounded color="success">
+                        Active
                       </MDBBtn>
-                    ) : null}
+                    ) : (
+                      <MDBBtn rounded color="danger">
+                        Deactive
+                      </MDBBtn>
+                    )}
                   </TableCell>
-                  <TableCell width={"15%"} align="center">
+                  <TableCell width={"15%"} align="right">
                     <Grid container spacing={2}>
                       <Grid item xs={5} className="btn-view">
                         <MDBBtn
@@ -297,6 +316,7 @@ function Speciallist() {
                     defaultValue={{ value: "all", label: "ທັງໝົດ" }}
                     // styles={customStyles}
                     onChange={(e) => getValueNetwork(e)}
+                    isDisabled
                   />
                 </div>
               </Grid>
@@ -377,20 +397,6 @@ function Speciallist() {
             <Grid item xs={12}>
               <div>
                 <Row data={listSpecial} />
-                {/* <table className="list-phone">
-                  <tr>
-                    <th width={120}>No. </th>
-                    <th>ປະເພດແພັກແກັດ</th>
-                    <th width={120}>ເບີ</th>
-                    <th>ວັນທີເລີ່ມ</th>
-                    <th>ວັນທີສິ້ນສຸດ</th>
-                    <th>ເເຂວງ</th>
-                    <th>ສະຖານະ</th>
-                    <th>ຈັດການ</th>
-                  </tr>
-
-                  <tbody>{}</tbody>
-                </table> */}
               </div>
             </Grid>
           </Grid>

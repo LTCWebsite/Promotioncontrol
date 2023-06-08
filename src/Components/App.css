@@ -19,6 +19,8 @@ html {
 
 u {
   text-decoration: none;
+  font-family: "Poppins", "Noto Sans Lao", sans-serif;
+  font-weight: bold;
 }
 
 /* ==========> Login <========== */
@@ -798,4 +800,9 @@ td {
 
 .btn-view {
   margin-right: 5px !important;
+}
+
+.head-table-Speciallis {
+  background-color: #e3e3e3 !important;
+
 }
