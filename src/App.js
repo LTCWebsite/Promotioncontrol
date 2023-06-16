@@ -1,9 +1,9 @@
-import Router from './Route/Router'
-import { ToastContainer } from 'react-toastify';
+import Router from "./Route/Router";
+import { ToastContainer } from "react-toastify";
 function App() {
   return (
     <>
-      <Router/>
+      <Router />
       <ToastContainer />
     </>
   );
