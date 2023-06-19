@@ -9,7 +9,7 @@ function router() {
     <>
       <BrowserRouter>
         <Switch>
-          {/* <Route path={"/"} component={Login} exact/> */}
+          <Route path={"/"} component={Login} exact />
           <ProtectRoute path={"/home"} component={Home} />
         </Switch>
       </BrowserRouter>

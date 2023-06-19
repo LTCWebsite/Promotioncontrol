@@ -43,6 +43,8 @@ import Promotions from "../Promotions/Firstactive";
 import Firstactive from "../Promotions/Firstactive";
 import Reportpromotion from "../Report/Reportpromotion";
 import Speciallist from "../Promotions/Speciallist";
+import AddNewList from "../Promotions/AddNewList";
+import Viewspeciallist from "../Promotions/View/Viewspeciallist";
 
 const drawerWidth = 250;
 
@@ -428,65 +430,6 @@ export default function PersistentDrawerLeft() {
               </ListItemButton>
             </List>
           </Grid>
-
-          {/* <List>
-            <ListItemButton
-              className={
-                pathname === "/home/report"
-                  ? "home_drawer_menu menu-active"
-                  : "home_drawer_menu"
-              }
-              onClick={handleClick}
-            >
-              <ListItemIcon style={{ minWidth: "30px" }}>
-                <IconReport />
-              </ListItemIcon>
-              <ListItemText
-                className="home_drawer_menuText"
-                primary="ການລາຍງານ"
-              />
-              {openSub ? <IconMenuDown /> : <IconMenuUp />}
-            </ListItemButton>
-            <Collapse in={openSub} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 8 }}>
-                  <ListItemText
-                    className="home_drawer_menuText"
-                    sx={{ fontFamily: "Noto Sans Lao" }}
-                    primary="ແພັກເກັດໃກ້ໝົດອາຍຸ"
-                  />
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 8 }}>
-                  <ListItemText
-                    className="home_drawer_menuText"
-                    sx={{ fontFamily: "Noto Sans Lao" }}
-                    primary="ແພັກເກັດໝົດອາຍຸ"
-                  />
-                </ListItemButton>
-              </List>
-            </Collapse>
-          </List> */}
-
-          {/* <List>
-            <ListItemButton
-              className={
-                pathname === "/home/setting"
-                  ? "home_drawer_menu menu-active"
-                  : "home_drawer_menu"
-              }
-              onClick={() => history.push("/home/setting")}
-            >
-              <ListItemIcon style={{ minWidth: "30px" }}>
-                <span style={{ paddingBottom: ".2rem" }}>
-                  <IconGroup />
-                </span>
-              </ListItemIcon>
-              <ListItemText
-                className="home_drawer_menuText"
-                primary="ຈັດການຜູ້ໃຊ້"
-              />
-            </ListItemButton>
-          </List> */}
         </div>
       </Drawer>
 
@@ -507,6 +450,16 @@ export default function PersistentDrawerLeft() {
             <Route path={"/home/profile"} component={Profile} exact />
             <Route path={"/home/report"} component={Reportpromotion} exact />
             <Route path={"/home/setting"} component={HomeRole} exact />
+            <Route
+              path={"/home/addnewspeciallist"}
+              component={AddNewList}
+              exact
+            />
+            <Route
+              path={"/home/viewspecial"}
+              component={Viewspeciallist}
+              exact
+            />
             {/* <Route path={"/home/manual"} component={HomeRole} exact /> */}
           </Switch>
         </Typography>

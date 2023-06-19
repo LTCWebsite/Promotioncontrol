@@ -49,7 +49,10 @@ function Speciallist() {
   const [slList, setslList] = useState(null);
   const [select, setSelect] = useState([]);
   const [List, setList] = useState([]);
+  const [search, setSearch] = useState("");
+  const [dataSpecial, setDataSpecial] = useState([]);
 
+  const his = useHistory();
   const dateNow = new Date();
 
   useEffect(() => {
@@ -65,7 +68,7 @@ function Speciallist() {
     }
   }, [slList]);
 
-  console.log("Select", select);
+  // console.log("Select", select);
 
   // const [getVIP, setGetVIP] = useState('all');
   function getValueSepcial(e) {
@@ -161,13 +164,12 @@ function Speciallist() {
   const LoadDataNew = (page, limit) => {
     setLoading(true);
     setdataTable([]);
-    setloading(true);
     let newValue = isNaN(parseInt(selectSpecial)) ? 0 : parseInt(selectSpecial);
     let newValue2 = isNaN(parseInt(seletgroup.value))
       ? 0
       : parseInt(seletgroup.value);
-    let newValue3 = getVIP === "ທັງໝົດ" ? "all" : getVIP;
-    let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
+    let newValue3 = getSpecial === "ທັງໝົດ" ? "all" : getSpecial;
+    // let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
 
     AxiosReq.post(
       `api/Special_Package/QuerySpecialPkList?page=${page}&limit=${limit}`,
@@ -176,7 +178,7 @@ function Speciallist() {
       },
       { headers: header }
     ).then((res) => {
-      console.log("dataList", res?.data);
+      // console.log("dataList", res?.data);
       if (res.status === 200) {
         setLoading(false);
         setsavePage(page);
@@ -186,13 +188,17 @@ function Speciallist() {
   };
 
   // console.log("PrmtId", dataListPrmtId);
-  // console.log("ByPrmtId", ByPrmtId);
+  // console.log("Sepeciallist", listSpecial);
 
   const Row = ({ data }) => {
     const [openTable, setOpenTable] = useState(false);
 
     const findMsisdn = (e) => {
       setOpenTable(!openTable);
+    };
+
+    const viewSpecial = () => {
+      his.push("/home/viewspecial");
     };
 
     // console.log("List: ", dataTable);
@@ -289,6 +295,138 @@ function Speciallist() {
                             variant="contained"
                             size="sm"
                             // className="btn-view"
+                            onClick={viewSpecial}
+                          >
+                            <Visibility className="icon-view" />
+                          </MDBBtn>
+                        </Grid>
+                        <Grid item xs={5}>
+                          <MDBBtn
+                            color="success"
+                            // sx={{textAlign}}
+                            variant="contained"
+                            size="sm"
+                            // className="btn-view"
+                            // onClick={() => view_pofile()}
+                          >
+                            <EditNote />
+                          </MDBBtn>
+                        </Grid>
+                      </Grid>
+                    </TableCell>
+                  </TableBody>
+                </>
+              );
+            })}
+          </Table>
+        )}
+      </>
+    );
+  };
+
+  //search by msisdn
+  const TableMSISDN = ({ row }) => {
+    const [openTable, setOpenTable] = useState(false);
+
+    const findMsisdn = (e) => {
+      setOpenTable(!openTable);
+    };
+
+    // console.log("List: ", dataTable);
+    return (
+      <>
+        {isLoading ? (
+          <Grid className="Loading loading-size">
+            <Lottie
+              loop
+              animationData={Loading}
+              play
+              style={{ width: "300px", height: "300px" }}
+            />
+          </Grid>
+        ) : (
+          <Table style={{ marginTop: 15 }}>
+            <TableHead className="head-table-Speciallis">
+              <TableRow>
+                <TableCell width={"10%"} align="center">
+                  <u>ລ/ດ.</u>
+                </TableCell>
+                <TableCell width={"12%"}>
+                  {" "}
+                  <u>ປະເພດແພັກແກັດ</u>
+                </TableCell>
+                <TableCell width={"10%"} align="center">
+                  <u>ເບີໂທ</u>
+                </TableCell>
+                <TableCell width={"15%"} align="center">
+                  <u>ວັນທີເລີ່ມ</u>
+                </TableCell>
+                <TableCell width={"15%"} align="center">
+                  <u>ວັນທີສິ້ນສຸດ</u>
+                </TableCell>
+                <TableCell width={"8%"}>
+                  {" "}
+                  <u>ເເຂວງ</u>{" "}
+                </TableCell>
+                <TableCell align="center">
+                  {" "}
+                  <u>ສະຖານະ</u>{" "}
+                </TableCell>
+                <TableCell align="center">
+                  {" "}
+                  <u>ຈັດການ</u>{" "}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            {row?.map((res, idx) => {
+              // console.log("Row:", res);
+              let status;
+              let numDay = moment
+                .duration(moment(res?.stopTime).diff(moment(dateNow)))
+                .asDays()
+                .toFixed(0);
+
+              return (
+                <>
+                  <TableBody>
+                    <TableCell align="center" width={"10%"}>
+                      {idx + 1}
+                    </TableCell>
+                    <TableCell align="left" width={"10%"}>
+                      {res?.prmtId}
+                    </TableCell>
+                    <TableCell align="center" width={"15%"}>
+                      {res?.msisdn}
+                    </TableCell>
+                    <TableCell align="center" width={"15%"}>
+                      {moment(res?.startTime).format("DD-MM-YYYY HH:mm:ss")}
+                    </TableCell>
+                    <TableCell align="center" width={"15%"}>
+                      {moment(res?.stopTime).format("DD-MM-YYYY HH:mm:ss")}
+                    </TableCell>
+                    <TableCell align="left" width={"10%"}>
+                      {res?.province}
+                    </TableCell>
+                    <TableCell align="center">
+                      {numDay > 0 ? (
+                        <MDBBtn rounded color="success">
+                          Active
+                        </MDBBtn>
+                      ) : (
+                        <MDBBtn rounded color="danger">
+                          Deactive
+                        </MDBBtn>
+                      )}
+                    </TableCell>
+                    <TableCell width={"15%"} align="right">
+                      <Grid container spacing={2}>
+                        <Grid item xs={5} className="btn-view">
+                          <MDBBtn
+                            color="success"
+                            // sx={{textAlign}}
+                            variant="contained"
+                            size="sm"
+                            // className="btn-view"
                             // onClick={() => view_datapackage()}
                           >
                             <Visibility className="icon-view" />
@@ -318,7 +456,44 @@ function Speciallist() {
     );
   };
 
-  console.log("All list", options_Speciallist);
+  // console.log("All list", options_Speciallist);
+
+  const onSpeciallist = () => {
+    his.push("/home/addnewspeciallist");
+  };
+
+  // console.log("List:", listSpecial);
+
+  //Search by msisdn
+  const HandleSearch = () => {
+    if (search === "") {
+      LoadData();
+    } else {
+      console.log(search);
+      // setdataTable([]);
+      setLoading(true);
+      Axios.post(
+        `http://172.28.26.146:1715/api/Special_Package/QueryByMsisdnSpecialPK?msisdn=${search}`,
+        { headers: header }
+      ).then((res) => {
+        console.log({ res });
+        if (res.status === 200) {
+          setdataTable(res?.data?.data);
+          setLoading(false);
+        }
+      });
+    }
+  };
+
+  // console.log("dataTable:", dataTable);
+  useEffect(() => {
+    HandleSearch();
+  }, []);
+  const HandleBack = (e) => {
+    if (search === "") {
+      LoadData();
+    }
+  };
 
   return (
     <>
@@ -379,23 +554,28 @@ function Speciallist() {
                       autoComplete="off"
                       id="standard-basic"
                       variant="outlined"
-                      placeholder="205xxxxxxx"
-                      // onKeyUp={HandleBack}
-                      onChange={(e) => setSearchNumber(e.target.value)}
+                      placeholder="20 5x xxx xxx"
+                      onKeyUp={HandleBack}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                   <div style={{ marginLeft: "1.5rem", marginTop: "1.5rem" }}>
                     <Button
                       variant="contained"
                       className="btn-search"
-                      // onClick={HandleSearch}
+                      onClick={HandleSearch}
                     >
                       ຄົ້ນຫາ
                     </Button>
                   </div>
                 </div>
               </Grid>
-              <Grid style={{ display: "flex" }} xs={3}>
+              <Grid
+                style={{ display: "flex" }}
+                lg={3}
+                xs={12}
+                className="right"
+              >
                 <Grid
                   item
                   xs={12}
@@ -404,7 +584,11 @@ function Speciallist() {
                   <MDBBtn className="me-1 mt-20" color="success">
                     Import Excel
                   </MDBBtn>
-                  <MDBBtn className="me-1 mt-20" color="danger">
+                  <MDBBtn
+                    className="me-1 mt-20"
+                    color="danger"
+                    onClick={onSpeciallist}
+                  >
                     ເພິ່ມໃໝ່
                   </MDBBtn>
                 </Grid>
@@ -431,7 +615,17 @@ function Speciallist() {
             </Grid>
             <Grid item xs={12}>
               <div>
-                <Row data={listSpecial} />
+                {search == "" ? (
+                  <>
+                    <Row data={listSpecial} />
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <TableMSISDN row={dataTable} />
+                    </div>
+                  </>
+                )}
               </div>
             </Grid>
           </Grid>
