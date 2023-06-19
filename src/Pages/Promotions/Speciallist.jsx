@@ -1,26 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Table, TableBody, TableCell, TableHead } from "@mui/material";
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconSearch,
-  Icon_View,
-} from "../Icon/Icon";
+import { IconSearch } from "../Icon/Icon";
 import OtherSelect from "react-select";
 import { Button, TextField, Typography, InputAdornment } from "@mui/material";
 import { MDBBtn } from "mdb-react-ui-kit";
 import TableRow from "@mui/material/TableRow";
-import { tableCellClasses } from "@mui/material";
 import moment from "moment";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import ManageTT from "./ManageTT";
 import { useHistory, useLocation } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
-import { ceil } from "lodash";
 import AxiosReq from "../../Components/Axios/AxiosReq";
 import Lottie from "react-lottie-player";
 import Loading from "../../Image/Lottie/Loading.json";
@@ -40,7 +30,6 @@ function Speciallist() {
   const [savePage, setsavePage] = useState(1);
   const [perPage] = useState(10);
 
-  const history = useHistory();
   const [allpage, setAllpage] = useState(0);
   const [seletgroup, setseletgroup] = useState({ value: 0, label: "ທັງໝົດ" });
   const [selectCate, setSelectCate] = useState(0);
@@ -330,35 +319,6 @@ function Speciallist() {
   };
 
   console.log("All list", options_Speciallist);
-
-  // const HandleSearch = () => {
-  //   if (search === "") {
-  //     LoadData();
-  //   } else {
-  //     // console.log(search);
-  //     setdataTable([]);
-  //     setloading(true);
-  //     Axios.post(
-  //       `/api/MsisdnVIP/SearchMsisdn?username=${tokenData.user[0].value}&page=1&limit=1`,
-  //       { msisdn: search },
-  //       { headers: header }
-  //     ).then((res) => {
-  //       // console.log({ res });
-  //       if (res.status === 200) {
-  //         let count = res.data?.msisdnList.length;
-  //         if (count > 0) {
-  //           // console.log(count)
-  //           setdataTable(res.data?.msisdnList);
-  //           setloading(false);
-  //           setAllpage(ceil(res.data?.dataCount / perPage));
-  //         } else {
-  //           setEmptyPage(true);
-  //         }
-  //         // console.log(res.data);
-  //       }
-  //     });
-  //   }
-  // };
 
   return (
     <>
