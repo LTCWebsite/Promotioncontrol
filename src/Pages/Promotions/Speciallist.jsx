@@ -52,7 +52,8 @@ function Speciallist() {
   const [List, setList] = useState([]);
   const [search, setSearch] = useState("");
   const [dataSpecial, setDataSpecial] = useState([]);
-  const [succes, setSuccesspopup] = useState(false);
+  const [open, setOpenDialog] = useState(false);
+  const [refesh, setRefesh] = useState(false);
 
   const his = useHistory();
   const dateNow = new Date();
@@ -460,10 +461,6 @@ function Speciallist() {
 
   // console.log("All list", options_Speciallist);
 
-  const onSpeciallist = () => {
-    his.push("/home/addnewspeciallist");
-  };
-
   // console.log("List:", listSpecial);
 
   //Search by msisdn
@@ -498,8 +495,38 @@ function Speciallist() {
     }
   };
 
+  const Addnewspeciallist = () => {
+    isLoading(true);
+    AxiosReq.post(
+      `/api/Special_Package/InsertMSISDNToSpecialList`,
+      {
+        prmtId: "Test1",
+        start: "2022-05-16T20:22:00",
+        stop: "2022-12-31T23:59:59",
+        startTime: "2022-05-16T20:22:00",
+        stopTime: "2022-12-31T23:59:59",
+        province: "VTE",
+      },
+      {
+        headers: header,
+      }
+    ).then((res) => {
+      if (res?.status === 200) {
+        isLoading(false);
+      }
+    });
+  };
+
   return (
     <>
+      <DialogAddnewlist
+        isShow={open}
+        onHide={(e) => setOpenDialog(e)}
+        addNew={(e) => {
+          setRefesh(e);
+          Addnewspeciallist();
+        }}
+      />
       <Grid container className="head-model">
         <Grid className="main" item xs={12}>
           <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
@@ -590,7 +617,7 @@ function Speciallist() {
                   <MDBBtn
                     className="me-1 mt-20"
                     color="danger"
-                    onClick={onSpeciallist}
+                    onClick={() => setOpenDialog(true)}
                   >
                     ເພິ່ມໃໝ່
                   </MDBBtn>
@@ -634,7 +661,6 @@ function Speciallist() {
           </Grid>
         </Grid>
       </Grid>
-      <DialogAddnewlist isShow={succes} onHide={() => setSuccesspopup(false)} />
     </>
   );
 }
