@@ -277,3 +277,18 @@
     width: 80px !important;
     height: 80px !important;
 }
+
+.center-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.danger {
+    color: #f14d58;
+}
+
+.Success {
+    color: rgb(20, 164, 77) !important;
+}

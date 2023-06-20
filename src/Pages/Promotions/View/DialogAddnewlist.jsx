@@ -81,17 +81,12 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
       >
         <Grid item xs={12} lg="none">
           <Grid item xs={12}>
-            <Grid item xs={12} className="center-2">
-              {/* <img src={Checklist} width="80px" height="80px" /> */}
-              <Recommend className="icon-confirme" />
-            </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
-          <Grid container item xs={12} className="center-2">
-            <Grid item xs={12}>
-              <h3 className="icon-image"></h3>
-            </Grid>
+          <Grid container item xs={12}>
+            <Grid item xs={12}></Grid>
             <Grid item xs={12} className="center-2">
-              <u>ທ່ານແນ່ໃຈແລ້ວບໍທີ່ຈະອະນຸມັດ...?</u>
+              <u>ເພິ່ມເບີພິເສດໃໝ່</u>
             </Grid>
             <Grid className="center-2" item xs={12}>
               <u className="m-0 center-2">
