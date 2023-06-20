@@ -15,6 +15,7 @@ import AxiosReq from "../../Components/Axios/AxiosReq";
 import Lottie from "react-lottie-player";
 import Loading from "../../Image/Lottie/Loading.json";
 import { EditNote, Visibility } from "@mui/icons-material";
+import DialogAddnewlist from "./View/DialogAddnewlist";
 
 function Speciallist() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -51,6 +52,7 @@ function Speciallist() {
   const [List, setList] = useState([]);
   const [search, setSearch] = useState("");
   const [dataSpecial, setDataSpecial] = useState([]);
+  const [succes, setSuccesspopup] = useState(false);
 
   const his = useHistory();
   const dateNow = new Date();
@@ -489,6 +491,7 @@ function Speciallist() {
   useEffect(() => {
     HandleSearch();
   }, []);
+
   const HandleBack = (e) => {
     if (search === "") {
       LoadData();
@@ -631,6 +634,7 @@ function Speciallist() {
           </Grid>
         </Grid>
       </Grid>
+      <DialogAddnewlist isShow={succes} onHide={() => setSuccesspopup(false)} />
     </>
   );
 }
