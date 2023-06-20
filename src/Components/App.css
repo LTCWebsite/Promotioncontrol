@@ -815,3 +815,9 @@ td {
   background-color: #e3e3e3 !important;
 
 }
+
+.center-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

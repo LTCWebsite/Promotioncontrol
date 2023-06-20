@@ -495,28 +495,6 @@ function Speciallist() {
     }
   };
 
-  const Addnewspeciallist = () => {
-    isLoading(true);
-    AxiosReq.post(
-      `/api/Special_Package/InsertMSISDNToSpecialList`,
-      {
-        prmtId: "Test1",
-        start: "2022-05-16T20:22:00",
-        stop: "2022-12-31T23:59:59",
-        startTime: "2022-05-16T20:22:00",
-        stopTime: "2022-12-31T23:59:59",
-        province: "VTE",
-      },
-      {
-        headers: header,
-      }
-    ).then((res) => {
-      if (res?.status === 200) {
-        isLoading(false);
-      }
-    });
-  };
-
   return (
     <>
       <DialogAddnewlist
@@ -524,7 +502,6 @@ function Speciallist() {
         onHide={(e) => setOpenDialog(e)}
         addNew={(e) => {
           setRefesh(e);
-          Addnewspeciallist();
         }}
       />
       <Grid container className="head-model">
