@@ -5,8 +5,8 @@ function AddNewList() {
   return (
     <>
       <Grid container>
-        <Grid item xs={12}>
-          Add new...
+        <Grid item xs={12} className="Add-newSpeciallist">
+          <u>Add new...</u>
         </Grid>
       </Grid>
     </>
