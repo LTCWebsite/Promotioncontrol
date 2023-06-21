@@ -6,32 +6,49 @@ import { useHistory } from "react-router";
 // import { AxiosReq } from "MyApp/Components/Axios";
 import Alert from "@mui/material/Alert";
 import { USER_KEY } from "../../../Constants";
-import { Checklist, Recommend } from "@mui/icons-material";
+import { Add, Checklist, Queue, Recommend } from "@mui/icons-material";
 import AxiosReq from "../../../Components/Axios/AxiosReq";
 import { Grid } from "@mui/material";
+import { InputText } from "primereact/inputtext";
 
 export default function DialogAddnewlist({ isShow, onHide, addNew }) {
+  const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
+  const header = {
+    Authorization: `Bearer ${tokenData.token}`,
+  };
+
   const his = useHistory();
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = useState(false);
+  const [PrmtID, setPrmtID] = useState("");
+  const [Phonenumber, setPhonenumber] = useState("");
+  const [StartTime, setStartTime] = useState("");
+  const [StopTime, setStopTime] = useState("");
+  const [Province, setProvince] = useState("");
 
   // console.log("ScoreS:", score);
+
+  console.log("PrmtID:", PrmtID);
+  console.log("Phone:", Phonenumber);
+  console.log("Startime:", StartTime);
+  console.log("Stoptime:", StopTime);
+  console.log("Province:", Province);
 
   const handleApprove = () => {
     // isLoading(true);
     AxiosReq.post(
       `/api/Special_Package/InsertMSISDNToSpecialList`,
-      {
-        prmtId: "Test1",
-        start: "2022-05-16T20:22:00",
-        stop: "2022-12-31T23:59:59",
-        startTime: "2022-05-16T20:22:00",
-        stopTime: "2022-12-31T23:59:59",
-        province: "VTE",
-      },
-      {
-        // headers: header,
-      }
+      [
+        {
+          prmtId: PrmtID,
+          start: Phonenumber,
+          stop: Phonenumber,
+          startTime: StartTime,
+          stopTime: StopTime,
+          province: Province,
+        },
+      ],
+      { headers: header }
     ).then((res) => {
       if (res?.status === 200) {
         // isLoading(false);
@@ -71,7 +88,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
       )}
       <Dialog
         open={isShow}
-        style={{ width: "50vw", minWidth: 500 }}
+        style={{ width: "40vw", minWidth: 500 }}
         visible={isShow}
         onHide={() => {
           onHide(!isShow);
@@ -84,27 +101,84 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
             <Grid item xs={12}></Grid>
           </Grid>
           <Grid container item xs={12}>
-            <Grid item xs={12}></Grid>
             <Grid item xs={12} className="center-2">
-              <u>ເພິ່ມເບີພິເສດໃໝ່</u>
-            </Grid>
-            <Grid className="center-2" item xs={12}>
-              <u className="m-0 center-2">
-                ກະລຸນາກວດສອບໃຫ້ແນ່ໃຈກ່ອນການອະນຸມັດທຸກຄັ້ງ!
+              <u className="f-20 Success">
+                ເພິ່ມເບີພິເສດໃໝ່ <Queue />
               </u>
             </Grid>
+            <Grid container className="center-2 mt-10" item xs={12} spacing={2}>
+              <Grid item xs={6}>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <u className="pdr-30">PrmtID:</u>
+                  </span>
+                  <InputText
+                    placeholder="PrmtID ..."
+                    onChange={(e) => setPrmtID(e.target.value)}
+                  />
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <u className="pdr-30"> Phone :</u>
+                  </span>
+                  <InputText
+                    placeholder="Phonenumber ..."
+                    onChange={(e) => setPhonenumber(e.target.value)}
+                  />
+                </div>
+              </Grid>
+            </Grid>
+            <Grid container className="center-2 mt-10" item xs={12} spacing={2}>
+              <Grid item xs={6}>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <u>Start Time:</u>
+                  </span>
+                  <InputText
+                    placeholder="Start Time ..."
+                    onChange={(e) => setStartTime(e.target.value)}
+                  />
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <u>Stop Time:</u>
+                  </span>
+                  <InputText
+                    placeholder="Stop Time:"
+                    onChange={(e) => setStopTime(e.target.value)}
+                  />
+                </div>
+              </Grid>
+            </Grid>
+            <Grid container className="center-2 mt-10" item xs={12} spacing={2}>
+              <Grid item xs={12}>
+                <div className="p-inputgroup">
+                  <span className="p-inputgroup-addon">
+                    <u className="pdr-16"> Province:</u>
+                  </span>
+                  <InputText
+                    placeholder="Province..."
+                    onChange={(e) => setProvince(e.target.value)}
+                  />
+                </div>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <div className="center-2 ">
               <MDBBtn
                 lassName="me-1"
                 color="success"
-                className="btn-back1 btn-successful"
+                className="btn-confirm mt-20"
                 label="Show"
                 icon="pi pi-external-link"
                 onClick={handleApprove}
               >
-                ຢືນຢັນ
+                <u className="f-15"> ຢືນຢັນ</u>
               </MDBBtn>
             </div>
           </Grid>
