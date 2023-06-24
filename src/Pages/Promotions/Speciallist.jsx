@@ -16,6 +16,7 @@ import Lottie from "react-lottie-player";
 import Loading from "../../Image/Lottie/Loading.json";
 import { EditNote, Visibility } from "@mui/icons-material";
 import DialogAddnewlist from "./View/DialogAddnewlist";
+import DialogUpload from "../Dialog/DialogUpload";
 
 function Speciallist() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -43,8 +44,6 @@ function Speciallist() {
   const [listSpecial, setSpeciallist] = useState([]);
   const [isLoading, setLoading] = useState("no");
   const [getSpecial, setGetSpecial] = useState("all");
-  const [selectSpecial, setSelectSpecial] = useState(0);
-  const [dataListPrmtId, setListPrmtId] = useState([]);
   const [ByPrmtId, setByPrmtId] = useState([]);
   const [idPrmtId, setIdPrmtId] = useState([]);
   const [slList, setslList] = useState(null);
@@ -53,6 +52,7 @@ function Speciallist() {
   const [search, setSearch] = useState("");
   const [dataSpecial, setDataSpecial] = useState([]);
   const [open, setOpenDialog] = useState(false);
+  const [load, setUpload] = useState(false);
   const [refesh, setRefesh] = useState(false);
 
   const his = useHistory();
@@ -82,7 +82,7 @@ function Speciallist() {
   //Show list selection special package list
   const options_Speciallist = List?.map((x) => ({
     value: x.prmtId,
-    label: x.prmtId,
+    label: x.code,
   }));
   const LoadData = () => {
     AxiosReq.get("http://172.28.26.146:1715/api/ListPrmtId").then((res) => {
@@ -167,7 +167,7 @@ function Speciallist() {
   const LoadDataNew = (page, limit) => {
     setLoading(true);
     setdataTable([]);
-    let newValue = isNaN(parseInt(selectSpecial)) ? 0 : parseInt(selectSpecial);
+    let newValue = isNaN(parseInt(slList)) ? 0 : parseInt(slList);
     let newValue2 = isNaN(parseInt(seletgroup.value))
       ? 0
       : parseInt(seletgroup.value);
@@ -504,6 +504,14 @@ function Speciallist() {
           setRefesh(e);
         }}
       />
+      <DialogUpload
+        isShow={load}
+        onHide={(e) => setUpload(e)}
+        data={List}
+        // addNew={(e) => {
+        //   setRefesh(e);
+        // }}
+      />
       <Grid container className="head-model">
         <Grid className="main" item xs={12}>
           <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
@@ -586,9 +594,13 @@ function Speciallist() {
                 <Grid
                   item
                   xs={12}
-                  className="bt-group-import floatRight pdr-20"
+                  className="bt-group-import floatRight pdr-20 right"
                 >
-                  <MDBBtn className="me-1 mt-20" color="success">
+                  <MDBBtn
+                    className="me-1 mt-20"
+                    color="success"
+                    onClick={() => setUpload(true)}
+                  >
                     Import Excel
                   </MDBBtn>
                   <MDBBtn

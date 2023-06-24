@@ -28,13 +28,13 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
 
   // console.log("ScoreS:", score);
 
-  console.log("PrmtID:", PrmtID);
-  console.log("Phone:", Phonenumber);
-  console.log("Startime:", StartTime);
-  console.log("Stoptime:", StopTime);
-  console.log("Province:", Province);
+  // console.log("PrmtID:", PrmtID);
+  // console.log("Phone:", Phonenumber);
+  // console.log("Startime:", StartTime);
+  // console.log("Stoptime:", StopTime);
+  // console.log("Province:", Province);
 
-  const handleApprove = () => {
+  const handleAppnewlist = () => {
     // isLoading(true);
     AxiosReq.post(
       `/api/Special_Package/InsertMSISDNToSpecialList`,
@@ -57,7 +57,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
   };
 
   useEffect(() => {
-    handleApprove();
+    handleAppnewlist();
   }, []);
 
   const handleCloseAlert = () => {
@@ -176,7 +176,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
                 className="btn-confirm mt-20"
                 label="Show"
                 icon="pi pi-external-link"
-                onClick={handleApprove}
+                onClick={handleAppnewlist}
               >
                 <u className="f-15"> ຢືນຢັນ</u>
               </MDBBtn>

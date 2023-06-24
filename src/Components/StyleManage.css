@@ -333,3 +333,39 @@
 .btn-confirm {
     width: 10vw !important;
 }
+
+.card-uploadfile {
+    background-color: gainsboro !important;
+    width: 80vw !important;
+    /* height: 200px !important; */
+}
+
+.p-button.p-component.p-fileupload-choose {
+    background-color: darkcyan !important;
+    border-color: darkcyan !important;
+    height: 40px !important;
+}
+
+.icon-upload {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+.span-head-select {
+    margin-bottom: 10px !important;
+}
+
+.right {
+    float: right !important;
+}
+
+.btn-uploadfile1 {
+    background-color: darkcyan !important;
+    border-color: darkcyan !important;
+    /* height: 40px !important; */
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputAdornedEnd.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    width: 160px !important;
+    /* height: 40px !important; */
+}
