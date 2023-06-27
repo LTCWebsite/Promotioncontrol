@@ -38,7 +38,6 @@ function Speciallist() {
   const [selectPrmtId, setSelectPrmtId] = useState(0);
 
   const [dataTable, setdataTable] = useState([]);
-  const [loading, setloading] = useState(true);
   const [emptyPage, setEmptyPage] = useState(false);
   const [packages, setPK] = useState([]);
   const [listSpecial, setSpeciallist] = useState([]);

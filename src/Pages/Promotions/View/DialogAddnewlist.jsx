@@ -28,14 +28,13 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
 
   // console.log("ScoreS:", score);
 
-  // console.log("PrmtID:", PrmtID);
-  // console.log("Phone:", Phonenumber);
-  // console.log("Startime:", StartTime);
-  // console.log("Stoptime:", StopTime);
-  // console.log("Province:", Province);
+  console.log("PrmtID:", PrmtID);
+  console.log("Phone:", Phonenumber);
+  console.log("Startime:", StartTime);
+  console.log("Stoptime:", StopTime);
+  console.log("Province:", Province);
 
   const handleAppnewlist = () => {
-    // isLoading(true);
     AxiosReq.post(
       `/api/Special_Package/InsertMSISDNToSpecialList`,
       [
@@ -52,6 +51,9 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
     ).then((res) => {
       if (res?.status === 200) {
         // isLoading(false);
+        setAlert(true);
+        console.log("Successful...");
+        onHide();
       }
     });
   };
@@ -64,15 +66,13 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
     setAlert(false);
   };
 
-  useEffect(() => {
-    if (alert) {
-      const timeout = setTimeout(() => {
-        setAlert(false);
-      }, 3000);
+  if (alert) {
+    const timeout = setTimeout(() => {
+      setAlert(false);
+    }, 3000);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [alert]);
+    return () => clearTimeout(timeout);
+  }
 
   return (
     <>

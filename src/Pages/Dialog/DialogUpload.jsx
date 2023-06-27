@@ -35,6 +35,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
+import moment from "moment";
+
 export default function DialogUpload({ isShow, onHide, data }) {
   const inputRef = useRef(null);
   //   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -55,12 +57,9 @@ export default function DialogUpload({ isShow, onHide, data }) {
   const [isLoading, setLoading] = useState(false);
 
   const [slCode, setSLCode] = useState([]);
-  const [slStart, setSLStart] = React.useState(dayjs("2022-04-17T15:30"));
-  const [slStop, setSLStop] = React.useState(dayjs("2022-04-17T15:30"));
-  const [dataExls, setDataExls] = useState([]);
-
-  console.log("Start time:", slStart);
-  console.log("Start time:", slStop);
+  const [slStart, setSLStart] = React.useState(dayjs("2023-04-17T15:30"));
+  const [slStop, setSLStop] = React.useState(dayjs("2023-05-17T15:30"));
+  const dateNow = new Date();
 
   console.log("Data:", data);
 
@@ -68,37 +67,44 @@ export default function DialogUpload({ isShow, onHide, data }) {
     setAlert(false);
   };
   const handleUpLoad = () => {
-    setLoading(true);
+    // setLoading(true);
     // console.log(fileUpload);
     let file = fileUpload;
     readXlsxFile(file).then((rows) => {
       // console.log("FIle:");
 
-      console.log("Code:", slCode);
+      // console.log("Code:", slCode);
       let data = [];
       rows.forEach((row) => {
-        console.log("Data file:", row);
+        // console.log("Data file:", row);
         data.push({
           prmtId: slCode,
-          stop: row[0],
-          start: row[0],
-          startTime: row[3],
-          stopTime: row[4],
+          stop: row[0].toString(),
+          start: row[0].toString(),
+          startTime: slStart,
+          stopTime: slStop,
           province: row[1],
         });
       });
-      setDataExls(data);
-      console.log("Data:", data);
-    });
-    //add new msisid by File Exls
-    AxiosReq.post(
-      `/api/Special_Package/InsertMSISDNToSpecialList`,
-      [{ dataExls }],
-      {}
-    ).then((res) => {
-      if (res?.status === 200) {
-        setLoading(false);
-      }
+
+      //add new msisid by File Exls
+      // setDataExls(data);
+
+      AxiosReq.post(
+        `/api/Special_Package/InsertMSISDNToSpecialList`,
+        [{ data }],
+        {}
+      ).then((res) => {
+        if (res?.status === 200) {
+          console.log("Succesful : ", res);
+          onHide();
+          setAlert(true);
+
+          setTimeout(() => {
+            setAlert(false);
+          }, 3000);
+        }
+      });
     });
   };
 
@@ -106,6 +112,16 @@ export default function DialogUpload({ isShow, onHide, data }) {
     name: x.code,
     code: x.prmtId,
   }));
+
+  const handleSelectDateStart = () => {
+    setSLStart(slStart);
+  };
+  const handleSelectDateStop = () => {
+    setSLStop(slStop);
+  };
+
+  console.log("Start time:", slStart);
+  console.log("Stop Time:", slStop);
 
   return (
     <>
@@ -116,19 +132,9 @@ export default function DialogUpload({ isShow, onHide, data }) {
           severity="success"
           onClose={handleCloseAlert}
         >
-          <u>ທ່ານໄດ້ຢືນຢັນສຳເລັດ !</u>
+          <u>ທ່ານໄດ້ອັບໂຫລດສຳເລັດ !</u>
         </Alert>
       )}
-      {/* {isLoading ? (
-        <Grid className="Loading loading-size">
-          <Lottie
-            loop
-            animationData={Loading}
-            play
-            style={{ width: "300px", height: "300px" }}
-          />
-        </Grid>
-      ) : null} */}
       <Dialog
         open={isShow}
         style={{ width: "50vw", minWidth: 500 }}
@@ -159,6 +165,8 @@ export default function DialogUpload({ isShow, onHide, data }) {
                     optionLabel="name"
                     editable
                     className="w-full md:w-14rem"
+                    // defaultValue={{ value: "all", label: "ທັງໝົດ" }}
+                    placeholder="ເລືອກເເຟ໋ກເກັດ"
                   />
                 </div>
               </Grid>
@@ -173,7 +181,8 @@ export default function DialogUpload({ isShow, onHide, data }) {
                         <DateTimePicker
                           label="ເລືອກວັນທີເລີ່ມ"
                           value={slStart}
-                          onChange={(e) => setSLStart(e.target.value)}
+                          // onChange={(e) => setSLStart(e.target?.value)}
+                          onChange={handleSelectDateStart}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -192,7 +201,11 @@ export default function DialogUpload({ isShow, onHide, data }) {
                           label="ເລືອກວັນທີສິ້ນສຸດ"
                           value={slStop}
                           className="DateStart"
-                          onChange={(e) => setSLStop(e.value)}
+                          onChange={handleSelectDateStop}
+                          // onChange={(e) =>
+                          //   console.log("STop:", e.target?.value)
+                          // }
+                          dateFormat="yyyy-MM-dd"
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -205,7 +218,7 @@ export default function DialogUpload({ isShow, onHide, data }) {
                     <MDBCardBody>
                       <MDBCardTitle>
                         {" "}
-                        <u className="center-2">ອັບໂຫລດໄຟລ</u>
+                        {/* <u className="center-2">ອັບໂຫລດໄຟລ</u> */}
                         <Grid item xs={12} className="center-2">
                           <DriveFolderUploadRounded className="icon-upload " />
                         </Grid>
@@ -215,7 +228,7 @@ export default function DialogUpload({ isShow, onHide, data }) {
                       <Grid container className="center-2" item xs={12}>
                         <Grid item xs={12}>
                           <MDBCardText className="center-2">
-                            <u>​ໄຟລຂອງທ່ານ : </u>
+                            <u>ເລືອກ​ໄຟລຂອງທ່ານ : </u>
                           </MDBCardText>
                         </Grid>
                         <Grid item xs={12} className="center-2">
@@ -233,20 +246,31 @@ export default function DialogUpload({ isShow, onHide, data }) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <div className="center-2 ">
-              <MDBBtn
-                lassName="me-1"
-                color="success"
-                className="btn-confirm mt-20"
-                label="Show"
-                icon="pi pi-external-link"
-                onClick={handleUpLoad}
-              >
-                <u className="f-20"> ຢືນຢັນ</u>
-              </MDBBtn>
-            </div>
-          </Grid>
+          {isLoading ? (
+            <Grid className="Loading loading-size">
+              <Lottie
+                loop
+                animationData={Loading}
+                play
+                style={{ width: "100px", height: "100px" }}
+              />
+            </Grid>
+          ) : (
+            <Grid item xs={6}>
+              <div className="center-2 ">
+                <MDBBtn
+                  lassName="me-1"
+                  color="success"
+                  className="btn-confirm mt-20"
+                  label="Show"
+                  icon="pi pi-external-link"
+                  onClick={handleUpLoad}
+                >
+                  <u className="f-20"> ຢືນຢັນ</u>
+                </MDBBtn>
+              </div>
+            </Grid>
+          )}
         </Grid>
       </Dialog>
     </>
