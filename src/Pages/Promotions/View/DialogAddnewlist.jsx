@@ -16,6 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import moment from "moment";
 
 export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -32,68 +33,59 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
   const [StopTime, setStopTime] = useState("");
   const [Province, setProvince] = useState("");
   const [slCode, setSLCode] = useState([]);
-  const [slStart, setSLStart] = React.useState(dayjs("2023-04-17T15:30"));
-  const [slStop, setSLStop] = React.useState(dayjs("2023-05-17T15:30"));
+  const [slStart, setSLStart] = React.useState("");
+  const [slStop, setSLStop] = React.useState("");
 
   // console.log("ScoreS:", score);
 
-  console.log("PrmtID:", PrmtID);
-  console.log("Phone:", Phonenumber);
-  console.log("Startime:", StartTime);
-  console.log("Stoptime:", StopTime);
-  console.log("Province:", Province);
+  // console.log("PrmtID:", PrmtID);
+  // console.log("Phone:", Phonenumber);
+  // console.log("Startime:", slStart);
+  // console.log("Stoptime:", slStop);
+  // console.log("Province:", Province);
 
   const option_Code = data?.map((x) => ({
     name: x.code,
     code: x.prmtId,
   }));
 
-  const handleSelectDateStart = () => {
-    setSLStart(slStart);
-  };
-  const handleSelectDateStop = () => {
-    setSLStop(slStop);
+  const handleCloseAlert = () => {
+    setAlert(false);
   };
 
   const handleAppnewlist = () => {
+    const data1 = {
+      prmtId: PrmtID?.code,
+      start: Phonenumber,
+      stop: Phonenumber,
+      startTime: slStart,
+      stopTime: slStop,
+      province: Province,
+    };
+
+    console.log("Data: ", data1);
     AxiosReq.post(
       `/api/Special_Package/InsertMSISDNToSpecialList`,
-      [
-        {
-          prmtId: PrmtID,
-          start: Phonenumber,
-          stop: Phonenumber,
-          startTime: StartTime,
-          stopTime: StopTime,
-          province: Province,
-        },
-      ],
-      { headers: header }
+      [{ data1 }],
+      {
+        headers: header,
+      }
     ).then((res) => {
       if (res?.status === 200) {
         // isLoading(false);
         setAlert(true);
+        setTimeout(() => {
+          setAlert(false);
+        }, 3000);
         console.log("Successful...");
         onHide();
       }
     });
   };
 
-  useEffect(() => {
-    handleAppnewlist();
-  }, []);
-
-  const handleCloseAlert = () => {
-    setAlert(false);
-  };
-
-  if (alert) {
-    const timeout = setTimeout(() => {
-      setAlert(false);
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }
+  // useEffect(() => {
+  //   handleAppnewlist();
+  // }, []);
 
   return (
     <>
@@ -104,7 +96,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
           severity="success"
           onClose={handleCloseAlert}
         >
-          <u>ທ່ານໄດ້ຢືນຢັນສຳເລັດ !</u>
+          <u>ທ່ານໄດ້ເພິ່ມສຳເລັດ !</u>
         </Alert>
       )}
       <Dialog
@@ -131,11 +123,11 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
               <Grid item xs={6}>
                 <div className="p-inputgroup">
                   <span className="p-inputgroup-addon">
-                    <u className="pdr-42">Code : </u>
+                    <u className="pdr-100">Code : </u>
                   </span>
                   <Dropdown
-                    value={slCode}
-                    onChange={(e) => setSLCode(e.value)}
+                    value={PrmtID?.name}
+                    onChange={(e) => setPrmtID(e.value)}
                     options={option_Code}
                     optionLabel="name"
                     editable
@@ -147,7 +139,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
               <Grid item xs={6}>
                 <div className="p-inputgroup">
                   <span className="p-inputgroup-addon">
-                    <u className="pdr-35"> Phone :</u>
+                    <u className="pdr-60"> Phone :</u>
                   </span>
                   <InputText
                     placeholder="Phonenumber ..."
@@ -168,21 +160,22 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer components={["DateTimePicker"]}>
                             <DateTimePicker
-                              value={slStart}
+                              // value={StartTime}
                               className="DateStart"
-                              onChange={handleSelectDateStart}
-                              dateFormat="yyyy-MM-dd"
+                              onChange={(e) =>
+                                setSLStart(
+                                  moment(e.toString()).format(
+                                    "YYYY-MM-DDTHH:mm:ss"
+                                  )
+                                )
+                              }
+                              // dateFormat="yyyy-MM-dd"
                             />
                           </DemoContainer>
                         </LocalizationProvider>
                       </div>
                     </div>
                   </Grid>
-
-                  {/* <InputText
-                    placeholder="Start Time ..."
-                    onChange={(e) => setStartTime(e.target.value)}
-                  /> */}
                 </Grid>
               </Grid>
 
@@ -190,15 +183,21 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
                 <Grid item xs={12}>
                   <div className="p-inputgroup ">
                     <span className=" p-inputgroup-addon hight-startime">
-                      <u className="font-12 pdr-60">Start Time:</u>
+                      <u className="font-12 pdr-60">Stop Time:</u>
                     </span>
                     <div className="p-inputgroup-addon date-start">
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={["DateTimePicker"]}>
                           <DateTimePicker
-                            value={slStart}
+                            // value={slStop}
                             className="DateStart"
-                            onChange={handleSelectDateStart}
+                            onChange={(e) =>
+                              setSLStop(
+                                moment(e.toString()).format(
+                                  "YYYY-MM-DDTHH:mm:ss"
+                                )
+                              )
+                            }
                             dateFormat="yyyy-MM-dd"
                           />
                         </DemoContainer>
@@ -212,7 +211,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
               <Grid item xs={12}>
                 <div className="p-inputgroup">
                   <span className="p-inputgroup-addon">
-                    <u className="pdr-16"> Province:</u>
+                    <u className="pdr-80"> Province:</u>
                   </span>
                   <InputText
                     placeholder="Province..."

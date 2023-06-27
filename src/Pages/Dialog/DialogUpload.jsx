@@ -46,11 +46,6 @@ export default function DialogUpload({ isShow, onHide, data }) {
   const his = useHistory();
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = useState(false);
-  const [PrmtID, setPrmtID] = useState("");
-  const [Phonenumber, setPhonenumber] = useState("");
-  const [StartTime, setStartTime] = useState("");
-  const [StopTime, setStopTime] = useState("");
-  const [Province, setProvince] = useState("");
   const [fileUpload, setFileUpload] = React.useState();
   const toast = useRef(null);
   const [isLoading, setLoading] = useState(false);
@@ -61,6 +56,9 @@ export default function DialogUpload({ isShow, onHide, data }) {
   const dateNow = new Date();
 
   console.log("Data:", data);
+
+  console.log("STart", slStart);
+  console.log("STop", slStop);
 
   const handleCloseAlert = () => {
     setAlert(false);
@@ -77,7 +75,7 @@ export default function DialogUpload({ isShow, onHide, data }) {
       rows.forEach((row) => {
         // console.log("Data file:", row);
         data.push({
-          prmtId: slCode,
+          prmtId: slCode?.code,
           stop: row[0].toString(),
           start: row[0].toString(),
           startTime: slStart,
@@ -112,15 +110,8 @@ export default function DialogUpload({ isShow, onHide, data }) {
     code: x.prmtId,
   }));
 
-  const handleSelectDateStart = () => {
-    setSLStart(slStart);
-  };
-  const handleSelectDateStop = () => {
-    setSLStop(slStop);
-  };
-
-  console.log("Start time:", slStart);
-  console.log("Stop Time:", slStop);
+  // console.log("Start time:", slStart);
+  // console.log("Stop Time:", slStop);
 
   return (
     <>
@@ -179,9 +170,11 @@ export default function DialogUpload({ isShow, onHide, data }) {
                       <DemoContainer components={["DateTimePicker"]}>
                         <DateTimePicker
                           label="ເລືອກວັນທີເລີ່ມ"
-                          value={slStart}
-                          // onChange={(e) => setSLStart(e.target?.value)}
-                          onChange={handleSelectDateStart}
+                          onChange={(e) =>
+                            setSLStart(
+                              moment(e.toString()).format("YYYY-MM-DDTHH:mm:ss")
+                            )
+                          }
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -198,12 +191,12 @@ export default function DialogUpload({ isShow, onHide, data }) {
                       <DemoContainer components={["DateTimePicker"]}>
                         <DateTimePicker
                           label="ເລືອກວັນທີສິ້ນສຸດ"
-                          value={slStop}
                           className="DateStart"
-                          onChange={handleSelectDateStop}
-                          // onChange={(e) =>
-                          //   console.log("STop:", e.target?.value)
-                          // }
+                          onChange={(e) =>
+                            setSLStop(
+                              moment(e.toString()).format("YYYY-MM-DDTHH:mm:ss")
+                            )
+                          }
                           dateFormat="yyyy-MM-dd"
                         />
                       </DemoContainer>

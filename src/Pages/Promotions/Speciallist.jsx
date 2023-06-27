@@ -330,10 +330,6 @@ function Speciallist() {
   const TableMSISDN = ({ row }) => {
     const [openTable, setOpenTable] = useState(false);
 
-    const findMsisdn = (e) => {
-      setOpenTable(!openTable);
-    };
-
     // console.log("List: ", dataTable);
     return (
       <>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Table, TableCell } from "@mui/material";
+import { Grid, Table, TableCell, TableHead } from "@mui/material";
 import {
   IconArrowDown,
   IconArrowUp,
@@ -22,6 +22,8 @@ import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
 import { ceil } from "lodash";
 import { Add } from "@mui/icons-material";
+import Lottie from "react-lottie-player";
+import Loading from "../../Image/Lottie/Loading.json";
 
 function Firstactive() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -43,35 +45,7 @@ function Firstactive() {
   const [dataTable, setdataTable] = useState([]);
   const [loading, setloading] = useState(true);
   const [emptyPage, setEmptyPage] = useState(false);
-
-  function getValueVIP(e) {
-    setGetVIP(e.value);
-    // console.log(e.value)
-  }
-
-  function getValueNetwork(e) {
-    setGetNetwork(e.value);
-    // console.log(e.value)
-  }
-
-  const customStyles = {
-    menu: (provided, state) => ({
-      ...provided,
-      borderBottom: "1px dotted pink",
-      color: state.selectProps.menuColor,
-      fontSize: "15px",
-    }),
-    singleValue: (provided, state) => {
-      const opacity = state.isDisabled ? 0.5 : 1;
-      const transition = "opacity 300ms";
-      return { ...provided, opacity, transition };
-    },
-    control: (base) => ({
-      ...base,
-      borderRadius: "7px",
-      textAlign: "center",
-    }),
-  };
+  const [isLoading, setLoading] = useState("no");
 
   const option_VIP = dataVIPType.map((x) => ({
     value: x.viptype,
@@ -145,6 +119,57 @@ function Firstactive() {
     LoadDataNew(savePage, perPage);
   }, [selectCate, seletgroup, getVIP, getNetwork]);
 
+  const TableFirstactive = () => {
+    return (
+      <>
+        {isLoading ? (
+          <Grid className="Loading loading-size">
+            <Lottie
+              loop
+              animationData={Loading}
+              play
+              style={{ width: "300px", height: "300px" }}
+            />
+          </Grid>
+        ) : (
+          <Table style={{ marginTop: 15 }}>
+            <TableHead className="head-table-Speciallis">
+              <TableRow>
+                <TableCell width={"10%"} align="center">
+                  <u>ລ/ດ.</u>
+                </TableCell>
+                <TableCell width={"12%"}>
+                  {" "}
+                  <u>ປະເພດແພັກແກັດ</u>
+                </TableCell>
+                <TableCell width={"10%"} align="center">
+                  <u>ເບີໂທ</u>
+                </TableCell>
+                <TableCell width={"15%"} align="center">
+                  <u>ວັນທີເລີ່ມ</u>
+                </TableCell>
+                <TableCell width={"15%"} align="center">
+                  <u>ວັນທີສິ້ນສຸດ</u>
+                </TableCell>
+                <TableCell width={"8%"}>
+                  {" "}
+                  <u>ເເຂວງ</u>{" "}
+                </TableCell>
+                <TableCell align="center">
+                  {" "}
+                  <u>ສະຖານະ</u>{" "}
+                </TableCell>
+                <TableCell align="center">
+                  {" "}
+                  <u>ຈັດການ</u>{" "}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        )}
+      </>
+    );
+  };
   return (
     <>
       <Grid container className="head-model">
@@ -231,20 +256,7 @@ function Firstactive() {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div>
-                <table className="list-phone">
-                  <tr>
-                    <th width={120}>ID </th>
-                    <th>ປະເພດແພັກແກັດ</th>
-                    <th width={120}>ເບີ</th>
-                    <th>ວັນທີເລີ່ມ</th>
-                    <th>ວັນທີສິ້ນສຸດ</th>
-                    <th>ເເຂວງ</th>
-                    <th>ສະຖານະ</th>
-                    <th>ຈັດການ</th>
-                  </tr>
-                </table>
-              </div>
+              <TableFirstactive />
             </Grid>
           </Grid>
         </Grid>
