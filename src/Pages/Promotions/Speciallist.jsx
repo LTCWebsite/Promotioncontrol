@@ -502,6 +502,7 @@ function Speciallist() {
         addNew={(e) => {
           setRefesh(e);
         }}
+        data={List}
       />
       <DialogUpload
         isShow={load}

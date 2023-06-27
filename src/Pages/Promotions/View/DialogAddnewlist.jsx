@@ -10,8 +10,14 @@ import { Add, Checklist, Queue, Recommend } from "@mui/icons-material";
 import AxiosReq from "../../../Components/Axios/AxiosReq";
 import { Grid } from "@mui/material";
 import { InputText } from "primereact/inputtext";
+import dayjs from "dayjs";
+import { Dropdown } from "primereact/dropdown";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
-export default function DialogAddnewlist({ isShow, onHide, addNew }) {
+export default function DialogAddnewlist({ isShow, onHide, addNew, data }) {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
   const header = {
     Authorization: `Bearer ${tokenData.token}`,
@@ -25,6 +31,9 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
   const [StartTime, setStartTime] = useState("");
   const [StopTime, setStopTime] = useState("");
   const [Province, setProvince] = useState("");
+  const [slCode, setSLCode] = useState([]);
+  const [slStart, setSLStart] = React.useState(dayjs("2023-04-17T15:30"));
+  const [slStop, setSLStop] = React.useState(dayjs("2023-05-17T15:30"));
 
   // console.log("ScoreS:", score);
 
@@ -33,6 +42,18 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
   console.log("Startime:", StartTime);
   console.log("Stoptime:", StopTime);
   console.log("Province:", Province);
+
+  const option_Code = data?.map((x) => ({
+    name: x.code,
+    code: x.prmtId,
+  }));
+
+  const handleSelectDateStart = () => {
+    setSLStart(slStart);
+  };
+  const handleSelectDateStop = () => {
+    setSLStop(slStop);
+  };
 
   const handleAppnewlist = () => {
     AxiosReq.post(
@@ -88,7 +109,7 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
       )}
       <Dialog
         open={isShow}
-        style={{ width: "40vw", minWidth: 500 }}
+        style={{ width: "60vw", minWidth: "50vw" }}
         visible={isShow}
         onHide={() => {
           onHide(!isShow);
@@ -110,18 +131,23 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
               <Grid item xs={6}>
                 <div className="p-inputgroup">
                   <span className="p-inputgroup-addon">
-                    <u className="pdr-30">PrmtID:</u>
+                    <u className="pdr-42">Code : </u>
                   </span>
-                  <InputText
-                    placeholder="PrmtID ..."
-                    onChange={(e) => setPrmtID(e.target.value)}
+                  <Dropdown
+                    value={slCode}
+                    onChange={(e) => setSLCode(e.value)}
+                    options={option_Code}
+                    optionLabel="name"
+                    editable
+                    // defaultValue={{ value: "all", label: "ທັງໝົດ" }}
+                    placeholder="ເລືອກເເຟ໋ກເກັດ"
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div className="p-inputgroup">
                   <span className="p-inputgroup-addon">
-                    <u className="pdr-30"> Phone :</u>
+                    <u className="pdr-35"> Phone :</u>
                   </span>
                   <InputText
                     placeholder="Phonenumber ..."
@@ -132,26 +158,54 @@ export default function DialogAddnewlist({ isShow, onHide, addNew }) {
             </Grid>
             <Grid container className="center-2 mt-10" item xs={12} spacing={2}>
               <Grid item xs={6}>
-                <div className="p-inputgroup">
-                  <span className="p-inputgroup-addon">
-                    <u>Start Time:</u>
-                  </span>
-                  <InputText
+                <Grid container item xs={12} className="p-inputgroup">
+                  <Grid item xs={12}>
+                    <div className="p-inputgroup ">
+                      <span className=" p-inputgroup-addon hight-startime">
+                        <u className="font-12 ">Start Time:</u>
+                      </span>
+                      <div className="p-inputgroup-addon date-start">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={["DateTimePicker"]}>
+                            <DateTimePicker
+                              value={slStart}
+                              className="DateStart"
+                              onChange={handleSelectDateStart}
+                              dateFormat="yyyy-MM-dd"
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
+                    </div>
+                  </Grid>
+
+                  {/* <InputText
                     placeholder="Start Time ..."
                     onChange={(e) => setStartTime(e.target.value)}
-                  />
-                </div>
+                  /> */}
+                </Grid>
               </Grid>
+
               <Grid item xs={6}>
-                <div className="p-inputgroup">
-                  <span className="p-inputgroup-addon">
-                    <u>Stop Time:</u>
-                  </span>
-                  <InputText
-                    placeholder="Stop Time:"
-                    onChange={(e) => setStopTime(e.target.value)}
-                  />
-                </div>
+                <Grid item xs={12}>
+                  <div className="p-inputgroup ">
+                    <span className=" p-inputgroup-addon hight-startime">
+                      <u className="font-12 pdr-60">Start Time:</u>
+                    </span>
+                    <div className="p-inputgroup-addon date-start">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={["DateTimePicker"]}>
+                          <DateTimePicker
+                            value={slStart}
+                            className="DateStart"
+                            onChange={handleSelectDateStart}
+                            dateFormat="yyyy-MM-dd"
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
+                    </div>
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
             <Grid container className="center-2 mt-10" item xs={12} spacing={2}>

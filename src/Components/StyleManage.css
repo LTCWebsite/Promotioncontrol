@@ -310,8 +310,24 @@
     margin-top: 20px !important;
 }
 
+.pdr-60 {
+    padding-right: 60px !important;
+}
+
+.pdr-42 {
+    padding-right: 42px !important;
+}
+
+.pdr-40 {
+    padding-right: 40px !important;
+}
+
 .pdr-38 {
     padding-right: 38px !important;
+}
+
+.pdr-35 {
+    padding-right: 35px !important;
 }
 
 .pdr-30 {
@@ -327,7 +343,7 @@
 }
 
 .pdr-16 {
-    padding-right: 16px !important;
+    padding-right: 18px !important;
 }
 
 .btn-confirm {
@@ -368,4 +384,24 @@
 .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputAdornedEnd.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
     width: 160px !important;
     /* height: 40px !important; */
+}
+
+.font-12 {
+    font-size: 16px !important;
+}
+
+.hight-startime {
+    /* height: 30px !important; */
+    width: 185px !important;
+    height: 90px !important;
+}
+
+.hight-stoptime {
+    /* height: 30px !important; */
+    width: 185px !important;
+    height: 90px !important;
+}
+
+.date-start {
+    width: 400px !important;
 }
