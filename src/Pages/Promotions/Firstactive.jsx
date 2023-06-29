@@ -21,9 +21,11 @@ import Stack from "@mui/material/Stack";
 import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
 import { ceil } from "lodash";
-import { Add } from "@mui/icons-material";
-import Lottie from "react-lottie-player";
-import Loading from "../../Image/Lottie/Loading.json";
+import { Add, EditNote, Pages, Visibility } from "@mui/icons-material";
+import AxiosReq from "../../Components/Axios/AxiosReq";
+import { TableBody } from "mui-datatables";
+import DialogUpload from "../Dialog/DialogUpload";
+import DialogFirstAc from "../Dialog/DialogFirstAc";
 
 function Firstactive() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -45,27 +47,13 @@ function Firstactive() {
   const [dataTable, setdataTable] = useState([]);
   const [loading, setloading] = useState(true);
   const [emptyPage, setEmptyPage] = useState(false);
-  const [isLoading, setLoading] = useState("no");
+  const [dataFirst, setDataFirst] = useState(false);
+  const [alldata, setAlldata] = useState([]);
+  const [dataPackage, setDataPackage] = useState([]);
+  const [refesh, setRefesh] = useState(false);
+  const [load, setUpload] = useState(false);
 
-  const option_VIP = dataVIPType.map((x) => ({
-    value: x.viptype,
-    label: x.viptype,
-  }));
-
-  const option_NetworkTpre = networkType.map((x) => ({
-    value: x.viptype,
-    label: x.viptype,
-  }));
-
-  const view_pofile = (e) => {
-    let data = dataTable.filter((x) => x.msisdn === e);
-    let sendPage = {
-      data1: data[0],
-      data2: savePage,
-    };
-    console.log(sendPage);
-    history.push({ pathname: "/home/profile", state: sendPage });
-  };
+  const dateNow = new Date();
 
   const handlePage = (x) => {
     // setsavePage(x);
@@ -73,105 +61,167 @@ function Firstactive() {
     // console.log(savePage);
   };
 
-  const LoadDataNew = (page, limit) => {
-    setdataTable([]);
-    setloading(true);
-    let newValue = isNaN(parseInt(selectCate)) ? 0 : parseInt(selectCate);
-    let newValue2 = isNaN(parseInt(seletgroup.value))
-      ? 0
-      : parseInt(seletgroup.value);
-    let newValue3 = getVIP === "ທັງໝົດ" ? "all" : getVIP;
-    let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
+  function LoadData() {
+    LoadDataNew(1, perPage);
+  }
 
-    Axios.post(
-      `/api/Group/QueryMsisdnInGroup?username=${userName}&page=${page}&limit=${limit}`,
-      {
-        cateId: newValue,
-        groupId: newValue2,
-        vipType: newValue3,
-        phoneType: newValue4,
-      },
-      { headers: header }
+  useEffect(() => {
+    LoadData();
+  }, []);
+
+  const LoadDataNew = () => {
+    console.log("savepage", savePage);
+    console.log("perpage", perPage);
+    setAlldata([]);
+    setloading(true);
+    AxiosReq.post(
+      `api/Churn/GetChurn?page=${savePage}&limit=${perPage}`,
+      {},
+      { headers: header },
+      { username: `${userName}` }
     ).then((res) => {
+      // console.log("Data first active: ", res);
       if (res.status === 200) {
-        setsavePage(page);
-        if (res.data.resultCode === 201) {
-          // console.log("br mi data");
-          setEmptyPage(true);
-        } else {
-          let count = res.data?.msisdnList?.length;
-          // console.log(res.data?.msisdnList);
-          // setsavePage(1)
-          if (count > 0) {
-            setEmptyPage(false);
-            setdataTable((newValue = res.data?.msisdnList));
-            setloading(false);
-            setAllpage(ceil(res.data?.dataCount / perPage));
-          } else {
-            setEmptyPage(true);
-          }
-        }
+        setDataPackage(res?.data);
+        setTimeout(() => {
+          setloading(false);
+        }, 800);
+        setAllpage(ceil(res.data.total / perPage));
       }
     });
   };
 
-  useEffect(() => {
-    LoadDataNew(savePage, perPage);
-  }, [selectCate, seletgroup, getVIP, getNetwork]);
+  // console.log("package:", dataPackage);
 
-  const TableFirstactive = () => {
+  const TableFirstactive = ({ data }) => {
     return (
       <>
-        {isLoading ? (
-          <Grid className="Loading loading-size">
-            <Lottie
-              loop
-              animationData={Loading}
-              play
-              style={{ width: "300px", height: "300px" }}
-            />
-          </Grid>
-        ) : (
-          <Table style={{ marginTop: 15 }}>
-            <TableHead className="head-table-Speciallis">
-              <TableRow>
-                <TableCell width={"10%"} align="center">
-                  <u>ລ/ດ.</u>
-                </TableCell>
-                <TableCell width={"12%"}>
-                  {" "}
-                  <u>ປະເພດແພັກແກັດ</u>
-                </TableCell>
-                <TableCell width={"10%"} align="center">
-                  <u>ເບີໂທ</u>
-                </TableCell>
-                <TableCell width={"15%"} align="center">
-                  <u>ວັນທີເລີ່ມ</u>
-                </TableCell>
-                <TableCell width={"15%"} align="center">
-                  <u>ວັນທີສິ້ນສຸດ</u>
-                </TableCell>
-                <TableCell width={"8%"}>
-                  {" "}
-                  <u>ເເຂວງ</u>{" "}
-                </TableCell>
-                <TableCell align="center">
-                  {" "}
-                  <u>ສະຖານະ</u>{" "}
-                </TableCell>
-                <TableCell align="center">
-                  {" "}
-                  <u>ຈັດການ</u>{" "}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-          </Table>
-        )}
+        {/* {isLoading ? (
+      <Grid className="Loading loading-size">
+        <Lottie
+          loop
+          animationData={Loading}
+          play
+          style={{ width: "300px", height: "300px" }}
+        />
+      </Grid>
+    ) : ( */}
+        <Table style={{ marginTop: 15 }}>
+          <TableHead className="head-table-Speciallis">
+            <TableRow>
+              <TableCell width={"8%"} align="center">
+                <u>ລ/ດ.</u>
+              </TableCell>
+              <TableCell width={"8%"}>
+                {" "}
+                <u>ປະເພດເບີ</u>
+              </TableCell>
+              <TableCell width={"8%"}>
+                {" "}
+                <u>ປະເພດກຸ່ມເບີ</u>
+              </TableCell>
+              <TableCell width={"8%"} align="center">
+                <u>ເບີໂທ</u>
+              </TableCell>
+              <TableCell width={"8%"} align="center">
+                <u>ວັນທີເລີ່ມ</u>
+              </TableCell>
+              <TableCell width={"8%"} align="center">
+                <u>ວັນທີສິ້ນສຸດ</u>
+              </TableCell>
+              <TableCell width={"10%"}>
+                {" "}
+                <u>ເເຂວງ, ເມືອງ</u>
+              </TableCell>
+              <TableCell>
+                {" "}
+                <u>ມູນຄ່າໂທ</u>{" "}
+              </TableCell>
+              <TableCell>
+                {" "}
+                <u>ສະຖານະ</u>{" "}
+              </TableCell>
+              <TableCell>
+                {" "}
+                <u>ເວລານຳໃຊ້</u>{" "}
+              </TableCell>
+              <TableCell align="center">
+                {" "}
+                <u>ຈັດການ</u>{" "}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          {data?.map((res, idx) => {
+            console.log("res:", res);
+            return (
+              <>
+                <TableRow>
+                  <TableCell align="center">{idx + 1}</TableCell>
+                  <TableCell>{res?.product}</TableCell>
+                  <TableCell>{res?.typegroup}</TableCell>
+                  <TableCell>{res?.msisdn}</TableCell>
+                  <TableCell>{res?.adate}</TableCell>
+                  <TableCell>{res?.activeStop}</TableCell>
+                  <TableCell>{res?.province + ", " + res?.district}</TableCell>
+                  <TableCell>{res?.balance}</TableCell>
+                  <TableCell>{res?.status}</TableCell>
+                  <TableCell>{res?.timeActive}</TableCell>
+                  <TableCell>
+                    <Grid container spacing={2}>
+                      <Grid item xs={5} className="btn-view">
+                        <MDBBtn
+                          color="success"
+                          // sx={{textAlign}}
+                          variant="contained"
+                          size="sm"
+                          // className="btn-view"
+                          // onClick={viewSpecial}
+                        >
+                          <Visibility className="icon-view" />
+                        </MDBBtn>
+                      </Grid>
+                      {/* <Grid item xs={5}>
+                        <MDBBtn
+                          color="success"
+                          // sx={{textAlign}}
+                          variant="contained"
+                          size="sm"
+                          // className="btn-view"
+                          // onClick={() => view_pofile()}
+                        >
+                          <EditNote />
+                        </MDBBtn>
+                      </Grid> */}
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              </>
+            );
+          })}
+        </Table>
       </>
     );
   };
+
   return (
     <>
+      <DialogFirstAc
+        isShow={load}
+        onHide={(e) => setUpload(e)}
+        addNew={(e) => {
+          setRefesh(e);
+        }}
+        data={dataPackage}
+      />
+      {/* <DialogUpload
+        isShow={load}
+        onHide={(e) => setUpload(e)}
+        addNew={(e) => {
+          setRefesh(e);
+        }}
+        data={dataPackage}
+      /> */}
       <Grid container className="head-model">
         <Grid className="main" item xs={12}>
           <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
@@ -230,8 +280,20 @@ function Firstactive() {
                 xs={12}
               >
                 <Grid xs={12} className="bt-group-import floatRight pdr-20">
-                  <MDBBtn className=" mt-20 btn-import" color="success">
+                  {/* <MDBBtn
+                    className=" mt-20 btn-import"
+                    color="success"
+                    size="sm"
+                    onClick={() => setUpload(true)}
+                  >
                     <Add /> Import Excel
+                  </MDBBtn> */}
+                  <MDBBtn
+                    className="me-1 mt-20"
+                    color="success"
+                    onClick={() => setUpload(true)}
+                  >
+                    Import Excel
                   </MDBBtn>
                 </Grid>
               </Grid>
@@ -256,7 +318,7 @@ function Firstactive() {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <TableFirstactive />
+              <TableFirstactive data={dataPackage} />
             </Grid>
           </Grid>
         </Grid>

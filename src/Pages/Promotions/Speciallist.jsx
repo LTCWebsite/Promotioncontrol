@@ -45,7 +45,7 @@ function Speciallist() {
   const [getSpecial, setGetSpecial] = useState("all");
   const [ByPrmtId, setByPrmtId] = useState([]);
   const [idPrmtId, setIdPrmtId] = useState([]);
-  const [slList, setslList] = useState(null);
+  const [slList, setslList] = useState(0);
   const [select, setSelect] = useState([]);
   const [List, setList] = useState([]);
   const [search, setSearch] = useState("");
@@ -93,6 +93,7 @@ function Speciallist() {
   };
 
   const DataPackageList = () => {
+    getSpecial();
     AxiosReq.post(
       `api/Special_Package/QueryByPrmtIdSpecialPK?prmt_id=${slList}`,
       {
@@ -146,9 +147,8 @@ function Speciallist() {
   }));
 
   const handlePage = (x) => {
-    // setsavePage(x);
     LoadDataNew(x, perPage);
-    // console.log(savePage);
+    console.log("Save page: ", savePage);
   };
 
   const Datapakage = () => {
@@ -166,13 +166,13 @@ function Speciallist() {
   const LoadDataNew = (page, limit) => {
     setLoading(true);
     setdataTable([]);
-    let newValue = isNaN(parseInt(slList)) ? 0 : parseInt(slList);
+    let newValue = isNaN(parseInt(slList.value)) ? 0 : parseInt(slList);
     let newValue2 = isNaN(parseInt(seletgroup.value))
       ? 0
       : parseInt(seletgroup.value);
     let newValue3 = getSpecial === "ທັງໝົດ" ? "all" : getSpecial;
     // let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
-
+    console.log("NewVlue:", newValue);
     AxiosReq.post(
       `api/Special_Package/QuerySpecialPkList?page=${page}&limit=${limit}`,
       {
@@ -622,7 +622,7 @@ function Speciallist() {
                       siblingCount={0}
                       shape="rounded"
                       onChange={(e, x) => handlePage(x)}
-                      className="pagination"
+                      // className="pagination"
                     />
                   </Stack>
                 </div>
