@@ -20,6 +20,7 @@ import {
   DriveFolderUploadRounded,
   Queue,
   Recommend,
+  SimCardDownload,
   Upload,
 } from "@mui/icons-material";
 import { Grid, TextField } from "@mui/material";
@@ -138,7 +139,7 @@ export default function DialogFirstAc({ isShow, onHide, data }) {
           <Grid container item xs={12}>
             <Grid item xs={12} className="center-2">
               <u className="f-20 Success">
-                ອັບໂຫລດໄຟລ ອັບເດດເບີໃຫມ່ <Queue />
+                ອັບໂຫລດໄຟລເປີດເບີໃຫມ່ <SimCardDownload />
               </u>
             </Grid>
             <Grid container className="center-2 mt-10" item xs={12} spacing={1}>
@@ -211,7 +212,7 @@ export default function DialogFirstAc({ isShow, onHide, data }) {
                         {" "}
                         {/* <u className="center-2">ອັບໂຫລດໄຟລ</u> */}
                         <Grid item xs={12} className="center-2">
-                          <DriveFolderUploadRounded className="icon-upload " />
+                          <SimCardDownload className="icon-upload " />
                         </Grid>
                       </MDBCardTitle>
 

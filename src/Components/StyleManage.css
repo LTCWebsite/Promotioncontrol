@@ -375,6 +375,12 @@
     height: 100px !important;
 }
 
+.icon-upload {
+    width: 15 0px !important;
+    height: 100px !important;
+    /* color: rgb(20, 164, 77); */
+}
+
 .span-head-select {
     margin-bottom: 10px !important;
 }
