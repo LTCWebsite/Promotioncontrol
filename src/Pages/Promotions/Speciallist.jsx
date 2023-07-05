@@ -7,7 +7,6 @@ import { MDBBtn } from "mdb-react-ui-kit";
 import TableRow from "@mui/material/TableRow";
 import moment from "moment";
 import { useHistory, useLocation } from "react-router-dom";
-import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
@@ -17,6 +16,7 @@ import Loading from "../../Image/Lottie/Loading.json";
 import { EditNote, Visibility } from "@mui/icons-material";
 import DialogAddnewlist from "./View/DialogAddnewlist";
 import DialogUpload from "../Dialog/DialogUpload";
+import { Pagination } from "antd";
 
 function Speciallist() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -43,8 +43,8 @@ function Speciallist() {
   const [listSpecial, setSpeciallist] = useState([]);
   const [isLoading, setLoading] = useState("no");
   const [getSpecial, setGetSpecial] = useState("all");
-  const [ByPrmtId, setByPrmtId] = useState([]);
-  const [idPrmtId, setIdPrmtId] = useState([]);
+  // const [ByPrmtId, setByPrmtId] = useState([]);
+  // const [idPrmtId, setIdPrmtId] = useState([]);
   const [slList, setslList] = useState(0);
   const [select, setSelect] = useState([]);
   const [List, setList] = useState([]);
@@ -54,15 +54,48 @@ function Speciallist() {
   const [load, setUpload] = useState(false);
   const [refesh, setRefesh] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1); // Current page number
+  const [pageSize, setPageSize] = useState(10); // Items per page
+  const [totalItems, setTotalItems] = useState(0);
+
   const his = useHistory();
   const dateNow = new Date();
 
   useEffect(() => {
+    // console.log("currentPage:", currentPage);
     LoadData();
-    LoadDataNew(savePage, perPage);
+    LoadDataNew();
     Datapakage();
     // TableListSpecial();
-  }, []);
+  }, [currentPage, pageSize]);
+
+  const LoadDataNew = () => {
+    setLoading(true);
+    setdataTable([]);
+    let newValue = isNaN(parseInt(slList.value)) ? 0 : parseInt(slList);
+    let newValue2 = isNaN(parseInt(seletgroup.value))
+      ? 0
+      : parseInt(seletgroup.value);
+    let newValue3 = getSpecial === "ທັງໝົດ" ? "all" : getSpecial;
+    // let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
+    // console.log("NewVlue:", newValue);
+    AxiosReq.post(
+      `api/Special_Package/QuerySpecialPkList?page=${currentPage}&limit=${pageSize}`,
+      {
+        prmtId: newValue,
+      },
+      { headers: header }
+    ).then((res) => {
+      // console.log("dataList", res?.data);
+      if (res.status === 200) {
+        setLoading(false);
+        setsavePage(savePage);
+        setSpeciallist(res.data?.data);
+        setTotalItems(res?.data?.total);
+        console.log("object", res?.data?.total);
+      }
+    });
+  };
 
   useEffect(() => {
     if (isLoading !== "no") {
@@ -70,13 +103,12 @@ function Speciallist() {
     }
   }, [slList]);
 
-  // console.log("Select", select);
-
-  // const [getVIP, setGetVIP] = useState('all');
   function getValueSepcial(e) {
     setslList(e.value);
     // console.log(e.value)
   }
+
+  // console.log("onChangSelectpage: ", currentPage);
 
   //Show list selection special package list
   const options_Speciallist = List?.map((x) => ({
@@ -93,7 +125,7 @@ function Speciallist() {
   };
 
   const DataPackageList = () => {
-    getSpecial();
+    setSpeciallist();
     AxiosReq.post(
       `api/Special_Package/QueryByPrmtIdSpecialPK?prmt_id=${slList}`,
       {
@@ -146,11 +178,6 @@ function Speciallist() {
     label: x.viptype,
   }));
 
-  const handlePage = (x) => {
-    LoadDataNew(x, perPage);
-    console.log("Save page: ", savePage);
-  };
-
   const Datapakage = () => {
     // AxiosReq.get("ListPrmtId")
     //   .then((res) => {
@@ -161,32 +188,6 @@ function Speciallist() {
     //   .catch((er) => {
     //     console.log(er);
     //   });
-  };
-
-  const LoadDataNew = (page, limit) => {
-    setLoading(true);
-    setdataTable([]);
-    let newValue = isNaN(parseInt(slList.value)) ? 0 : parseInt(slList);
-    let newValue2 = isNaN(parseInt(seletgroup.value))
-      ? 0
-      : parseInt(seletgroup.value);
-    let newValue3 = getSpecial === "ທັງໝົດ" ? "all" : getSpecial;
-    // let newValue4 = getNetwork === "ທັງໝົດ" ? "all" : getNetwork;
-    console.log("NewVlue:", newValue);
-    AxiosReq.post(
-      `api/Special_Package/QuerySpecialPkList?page=${page}&limit=${limit}`,
-      {
-        prmtId: newValue,
-      },
-      { headers: header }
-    ).then((res) => {
-      // console.log("dataList", res?.data);
-      if (res.status === 200) {
-        setLoading(false);
-        setsavePage(page);
-        setSpeciallist(res.data?.data);
-      }
-    });
   };
 
   // console.log("PrmtId", dataListPrmtId);
@@ -207,7 +208,7 @@ function Speciallist() {
     return (
       <>
         {isLoading ? (
-          <Grid className="Loading loading-size">
+          <Grid className="Loading loading-size  ">
             <Lottie
               loop
               animationData={Loading}
@@ -250,7 +251,7 @@ function Speciallist() {
               </TableRow>
             </TableHead>
             {data?.map((res, idx) => {
-              let status;
+              // let status;
               let numDay = moment
                 .duration(moment(res?.stopTime).diff(moment(dateNow)))
                 .asDays()
@@ -490,6 +491,10 @@ function Speciallist() {
     }
   };
 
+  //onchang
+  const onShowSizeChange = (current, pageSize) => {
+    // console.log(current, pageSize);
+  };
   return (
     <>
       <DialogAddnewlist
@@ -615,7 +620,7 @@ function Speciallist() {
               <div style={{ display: "flex", padding: "1em", float: "right" }}>
                 <div style={{ paddingTop: ".25rem" }}>
                   <Stack spacing={1}>
-                    <Pagination
+                    {/* <Pagination
                       count={allpage}
                       page={savePage === 1 ? 1 : savePage}
                       defaultPage={1}
@@ -623,6 +628,18 @@ function Speciallist() {
                       shape="rounded"
                       onChange={(e, x) => handlePage(x)}
                       // className="pagination"
+                    /> */}
+                    <Pagination
+                      // defaultCurrent={}
+                      showSizeChanger
+                      // onShowSizeChange={onShowSizeChange}
+                      current={currentPage}
+                      pageSize={pageSize}
+                      total={totalItems}
+                      onChange={(page, pageSize) => {
+                        setCurrentPage(page);
+                        setPageSize(pageSize);
+                      }}
                     />
                   </Stack>
                 </div>

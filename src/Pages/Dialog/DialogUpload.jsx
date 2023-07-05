@@ -51,14 +51,14 @@ export default function DialogUpload({ isShow, onHide, data }) {
   const [isLoading, setLoading] = useState(false);
 
   const [slCode, setSLCode] = useState([]);
-  const [slStart, setSLStart] = React.useState(dayjs("2023-04-17T15:30"));
-  const [slStop, setSLStop] = React.useState(dayjs("2023-05-17T15:30"));
+  const [slStart, setSLStart] = React.useState(dayjs(""));
+  const [slStop, setSLStop] = React.useState(dayjs(""));
   const dateNow = new Date();
 
-  console.log("Data:", data);
+  // console.log("Data:", data);
 
-  console.log("STart", slStart);
-  console.log("STop", slStop);
+  // console.log("STart", slStart);
+  // console.log("STop", slStop);
 
   const handleCloseAlert = () => {
     setAlert(false);

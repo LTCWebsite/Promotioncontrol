@@ -6,7 +6,6 @@ import {
   IconSearch,
   Icon_View,
 } from "../Icon/Icon";
-import OtherSelect from "react-select";
 import { Button, TextField, Typography, InputAdornment } from "@mui/material";
 import { MDBBtn } from "mdb-react-ui-kit";
 import TableRow from "@mui/material/TableRow";
@@ -16,7 +15,6 @@ import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import ManageTT from "./ManageTT";
 import { useHistory, useLocation } from "react-router-dom";
-import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Axios from "../../Components/Axios/Axios";
 import { USER_KEY } from "../../Constants";
@@ -26,6 +24,7 @@ import AxiosReq from "../../Components/Axios/AxiosReq";
 import { TableBody } from "mui-datatables";
 import DialogUpload from "../Dialog/DialogUpload";
 import DialogFirstAc from "../Dialog/DialogFirstAc";
+import { Pagination } from "antd";
 
 function Firstactive() {
   const tokenData = JSON.parse(localStorage.getItem(USER_KEY));
@@ -52,30 +51,21 @@ function Firstactive() {
   const [dataPackage, setDataPackage] = useState([]);
   const [refesh, setRefesh] = useState(false);
   const [load, setUpload] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const dateNow = new Date();
-
-  const handlePage = (x) => {
-    // setsavePage(x);
-    LoadDataNew(x, perPage);
-    // console.log(savePage);
-  };
-
-  function LoadData() {
-    LoadDataNew(1, perPage);
-  }
+  const [currentPage, setCurrentPage] = useState(1); // Current page number
+  const [pageSize, setPageSize] = useState(10); // Items per page
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    LoadData();
-  }, []);
+    LoadDataNew();
+  }, [currentPage, pageSize]);
 
   const LoadDataNew = () => {
-    console.log("savepage", savePage);
-    console.log("perpage", perPage);
     setAlldata([]);
     setloading(true);
     AxiosReq.post(
-      `api/Churn/GetChurn?page=${savePage}&limit=${perPage}`,
+      `api/Churn/GetChurn?page=${currentPage}&limit=${pageSize}`,
       {},
       { headers: header },
       { username: `${userName}` }
@@ -83,6 +73,7 @@ function Firstactive() {
       // console.log("Data first active: ", res);
       if (res.status === 200) {
         setDataPackage(res?.data);
+        console.log("dataPackage", res);
         setTimeout(() => {
           setloading(false);
         }, 800);
@@ -153,7 +144,7 @@ function Firstactive() {
           </TableHead>
 
           {data?.map((res, idx) => {
-            console.log("res:", res);
+            // console.log("res:", res);
             return (
               <>
                 <TableRow>
@@ -202,6 +193,31 @@ function Firstactive() {
         </Table>
       </>
     );
+  };
+
+  //Search by msisdn
+  const HandleSearch = () => {
+    if (search === "") {
+      LoadDataNew();
+    } else {
+      console.log(search);
+      // setdataTable([]);
+      setLoading(true);
+      Axios.post(
+        `http://172.28.26.146:1715/api/Special_Package/QueryByMsisdnSpecialPK?msisdn=${search}`,
+        { headers: header }
+      ).then((res) => {
+        console.log({ res });
+        if (res.status === 200) {
+          setdataTable(res?.data?.data);
+          setLoading(false);
+        }
+      });
+    }
+  };
+
+  const onShowSizeChange = (current, pageSize) => {
+    // console.log(current, pageSize);
   };
 
   return (
@@ -265,7 +281,7 @@ function Firstactive() {
                     <Button
                       variant="contained"
                       className="btn-search"
-                      // onClick={HandleSearch}
+                      onClick={HandleSearch}
                     >
                       ຄົ້ນຫາ
                     </Button>
@@ -305,13 +321,18 @@ function Firstactive() {
                 <div style={{ paddingTop: ".25rem" }}>
                   <Stack spacing={1}>
                     <Pagination
-                      count={allpage}
-                      page={savePage === 1 ? 1 : savePage}
-                      defaultPage={1}
-                      siblingCount={0}
-                      shape="rounded"
-                      onChange={(e, x) => handlePage(x)}
-                      // onChange={handlePage}
+                      // defaultCurrent={}
+                      showSizeChanger
+                      // onShowSizeChange={onShowSizeChange}
+                      current={currentPage}
+                      pageSize={pageSize}
+                      total={totalItems}
+                      pageRangeDisplayed={5}
+                      marginPagesDisplayed={2}
+                      onChange={(page, pageSize) => {
+                        setCurrentPage(page);
+                        setPageSize(pageSize);
+                      }}
                     />
                   </Stack>
                 </div>

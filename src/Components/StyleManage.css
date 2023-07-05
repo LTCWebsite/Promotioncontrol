@@ -255,6 +255,10 @@
     height: 100vh !important;
 }
 
+.center-loading {
+    margin-right: 50vw !important;
+}
+
 .pagination {
     font-size: 15px !important;
 }
@@ -418,4 +422,12 @@
 
 .date-start {
     width: 400px !important;
+}
+
+.pagination a {
+    color: #888;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-right: 5px;
 }
