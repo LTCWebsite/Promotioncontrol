@@ -516,7 +516,7 @@ function Speciallist() {
       <Grid container className="head-model">
         <Grid className="main" item xs={12}>
           <u>ຂໍ້ມູນເບີເເພັກເກັດພິເສດ</u>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <div
               style={{ display: "flex", padding: ".5rem", marginTop: "20px" }}
               className="wapper-manage wapper2"
@@ -533,7 +533,7 @@ function Speciallist() {
                   />
                 </div>
               </Grid>
-              <Grid xs={2} style={{ paddingRight: "5px" }}>
+              {/* <Grid xs={2} style={{ paddingRight: "5px" }}>
                 <div>
                   <p className="manage-ft-text">ປະເພດເບີ</p>
                   <OtherSelect
@@ -545,7 +545,7 @@ function Speciallist() {
                     isDisabled
                   />
                 </div>
-              </Grid>
+              </Grid> */}
               <Grid xs={5} style={{ paddingRight: "5px" }}>
                 <div style={{ display: "flex", marginTop: "10px" }}>
                   <div>
